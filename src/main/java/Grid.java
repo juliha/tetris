@@ -40,8 +40,11 @@ public class Grid {
       for (int x = (int) rectangle.getxInit(); x < rectangle.getxEnd(); x++) {
         cells[y][x] = index;
       }
-
     }
+  }
+
+  public boolean isOccupied(int x, int y) {
+    return this.cells[y][x] != -1;
   }
 }
 

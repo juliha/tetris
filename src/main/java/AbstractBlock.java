@@ -81,13 +81,15 @@ public abstract class AbstractBlock extends JComponent {
     double yEndNew = yInitNew+width;
 
 
-    //TODO check if this position is within bounds and still free
+    //TODO check if this position is still free
 
-    xInit = xInitNew;
-    xEnd = xInit +height;
-    yInit =  yInitNew;
-    yEnd =  yInit+width;
-    System.err.println(xInit +" "+xEnd +" " +yInit +" "+yEnd);
+    if (xInitNew  >= 0 && xEndNew <= 12
+        && yEndNew <= 21) {
+      xInit = xInitNew;
+      xEnd = xInit + height;
+      yInit = yInitNew;
+      yEnd = yInit + width;
+    }
   }
 
   @Override
