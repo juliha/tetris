@@ -43,16 +43,16 @@ public class BlockWorld extends JPanel {
         int code =keyEvent.getKeyCode();
         switch (code) {
           case KeyEvent.VK_LEFT :
-            grid.getRectangles().get(0).moveLeft();
+            grid.getLastRectangle().moveLeft();
             break;
           case KeyEvent.VK_RIGHT :
-            grid.getRectangles().get(0).moveRight();
+            grid.getLastRectangle().moveRight();
             break;
           case KeyEvent.VK_UP :
-            grid.getRectangles().get(0).rotate();
+            grid.getLastRectangle().rotate();
             break;
           case KeyEvent.VK_DOWN :
-            grid.getRectangles().get(0).moveDown();
+            grid.getLastRectangle().moveDown();
             break;
         }
         repaint();
@@ -95,12 +95,11 @@ public class BlockWorld extends JPanel {
 
 
   public void moveCurrentBlock() {
-    getLastRectangle().moveDown();
+    grid.getLastRectangle().moveDown();
   }
 
-  private Rectangle getLastRectangle() {
-    return grid.getRectangles().get(grid.getRectangles().size()-1);
-  }
+
+
 
   public void update() {
     moveCurrentBlock();

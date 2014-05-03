@@ -46,5 +46,9 @@ public class Grid {
   public boolean isOccupied(int x, int y) {
     return this.cells[y][x] != -1;
   }
+
+  public AbstractBlock getLastRectangle() {
+    return rectangles.get(rectangles.size()-1);
+  }
 }
 
