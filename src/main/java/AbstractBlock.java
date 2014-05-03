@@ -69,9 +69,8 @@ public abstract class AbstractBlock extends JComponent {
 
   protected void rotate() {
     double width = xEnd-xInit;
-    System.err.println("width "+width);
     double height = yEnd-yInit;
-    System.err.println("height " + height);
+
     double centerX = xInit+width/2;
     double centerY = yInit+(height/2);
 
@@ -82,23 +81,48 @@ public abstract class AbstractBlock extends JComponent {
     double yEndNew = yInitNew+width;
 
 
-
+    //TODO check if this position is within bounds and still free
 
     xInit = xInitNew;
     xEnd = xInit +height;
     yInit =  yInitNew;
     yEnd =  yInit+width;
     System.err.println(xInit +" "+xEnd +" " +yInit +" "+yEnd);
-
-
-
-
-
-
-
   }
 
-//  @Override
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    AbstractBlock that = (AbstractBlock) o;
+
+    if (Double.compare(that.xEnd, xEnd) != 0) return false;
+    if (Double.compare(that.xInit, xInit) != 0) return false;
+    if (Double.compare(that.yEnd, yEnd) != 0) return false;
+    if (Double.compare(that.yInit, yInit) != 0) return false;
+    if (color != null ? !color.equals(that.color) : that.color != null) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result;
+    long temp;
+    temp = Double.doubleToLongBits(xInit);
+    result = (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(xEnd);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(yInit);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    temp = Double.doubleToLongBits(yEnd);
+    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    result = 31 * result + (color != null ? color.hashCode() : 0);
+    return result;
+  }
+
+  //  @Override
 //  public void paintComponent(Graphics g) {
 //    Graphics2D g2d = (Graphics2D) g;
 //  }

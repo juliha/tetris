@@ -10,9 +10,9 @@ public class Grid {
   private List<Rectangle> rectangles;
 
   public Grid() {
-    for (int i = 0; i < cells.length; i++) {
-      for (int j=0; j < cells[i].length; j++) {
-        cells[i][j] = 0;
+    for (int y = 0; y < cells.length; y++) {
+      for (int x=0; x < cells[y].length; x++) {
+        cells[y][x] = -1;
       }
     }
     rectangles = new CopyOnWriteArrayList<Rectangle>();
@@ -32,6 +32,16 @@ public class Grid {
 
   public void addRectangle(Rectangle rectangle) {
     rectangles.add(rectangle);
+  }
+
+  public void safeRectanglePosition(Rectangle rectangle) {
+    int index = rectangles.indexOf(rectangle);
+    for (int y = (int) rectangle.getyInit();  y < rectangle.getyEnd(); y++) {
+      for (int x = (int) rectangle.getxInit(); x < rectangle.getxEnd(); x++) {
+        cells[y][x] = index;
+      }
+
+    }
   }
 }
 
