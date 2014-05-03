@@ -124,6 +124,10 @@ public abstract class AbstractBlock extends JComponent {
     return result;
   }
 
+  public void setSpeed(int speed) {
+    this.speed = speed;
+  }
+
   //  @Override
 //  public void paintComponent(Graphics g) {
 //    Graphics2D g2d = (Graphics2D) g;

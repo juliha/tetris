@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
+import java.util.*;
+import java.util.Timer;
 
 
 /**
@@ -15,9 +17,14 @@ public class BlockWorld extends JPanel {
   private Grid grid;
   private double factor = 396/12.0;
   Color border = Color.LIGHT_GRAY;
+  private int speed;
+  java.util.Timer timer;
+
 
   BlockWorld() {
     super();
+
+    timer = new Timer();
     this.setPreferredSize(new Dimension(width, height));
     this.setFocusable(true);
     grid = new Grid();
@@ -51,11 +58,52 @@ public class BlockWorld extends JPanel {
         repaint();
       }
     });
+    speed=2;
 
-    grid.addRectangle(new Rectangle(0, 4, 0, 1, Color.MAGENTA));
+
 //    grid.addRectangle(new Rectangle(0,3,0,1, Color.BLUE));
 
+  }
 
+  public void runGame() {
+
+    Thread gameThread = new Thread() {
+      public void run() {
+        Rectangle rectangle = new Rectangle(0, 4, 0, 1, Color.MAGENTA);
+        grid.addRectangle(rectangle);
+        while (true) {
+          update();
+          repaint();
+          if (rectangle.getyEnd() >= 20) {
+            rectangle = new Rectangle(0, 4, 0, 1, Color.blue);
+            grid.addRectangle(rectangle);
+          }
+          try {
+            Thread.sleep(2*1000);
+          } catch (InterruptedException ex) {}
+        }
+      }
+    };
+    gameThread.start();  // Invoke GaemThread.run()
+  }
+
+
+
+
+
+
+
+
+  public void moveCurrentBlock() {
+    getLastRectangle().moveDown();
+  }
+
+  private Rectangle getLastRectangle() {
+    return grid.getRectangles().get(grid.getRectangles().size()-1);
+  }
+
+  public void update() {
+    moveCurrentBlock();
   }
 
 
@@ -76,7 +124,6 @@ public class BlockWorld extends JPanel {
        }
     }
 
-    //repaint();
   }
 
 
@@ -85,6 +132,7 @@ public class BlockWorld extends JPanel {
     JFrame frame = new JFrame("Bloxx");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.add(this);
+    runGame();
 
     frame.pack();
     frame.setVisible(true);
