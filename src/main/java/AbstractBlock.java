@@ -60,9 +60,10 @@ public abstract class AbstractBlock extends JComponent {
     }
   }
   protected void moveDown() {
-    if (yEnd <= 23) {
+    if (yEnd <= 19) {
       yInit++;
       yEnd++;
+      System.out.println("yend " +yEnd);
     }
   }
 

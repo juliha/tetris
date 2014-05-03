@@ -6,7 +6,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by julia on 26.04.14.
  */
 public class Grid {
- private Integer[][] cells= new Integer[24][12];
+ private Integer[][] cells= new Integer[20][12];
   private List<Rectangle> rectangles;
 
   public Grid() {
@@ -30,12 +30,8 @@ public class Grid {
   }
 
 
-
-
-
-
-
-
-
+  public void addRectangle(Rectangle rectangle) {
+    rectangles.add(rectangle);
+  }
 }
 

@@ -11,7 +11,7 @@ import java.awt.geom.Rectangle2D;
 public class BlockWorld extends JPanel {
 
   private int width =396;
-  private int height = 600;
+  private int height = 660;
   private Grid grid;
   private double factor = 396/12.0;
   Color border = Color.LIGHT_GRAY;
@@ -53,7 +53,7 @@ public class BlockWorld extends JPanel {
     });
 
     grid.addRectangle(new Rectangle(0, 4, 0, 1, Color.MAGENTA));
-    grid.addRectangle(new Rectangle(0,3,0,1, Color.BLUE));
+//    grid.addRectangle(new Rectangle(0,3,0,1, Color.BLUE));
 
 
   }
