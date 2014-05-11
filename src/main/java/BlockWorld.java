@@ -14,7 +14,7 @@ public class BlockWorld extends JPanel {
 
     private int factor = 20;
     private int width = 10 * factor;
-    private int height = 16 * factor;
+    private int height = 17 * factor;
     Color border = Color.LIGHT_GRAY;
     private int speed;
     java.util.Timer timer;
@@ -78,12 +78,8 @@ public class BlockWorld extends JPanel {
     }
 
     private boolean moveIsPossible(AbstractBlock block) {
-        System.out.println(block.getBlockShape().length);
-        System.out.println(block.getBlockShape()[0].length);
         for (int y = 0; y < block.getBlockShape().length ; y++) {
-            System.out.println("y " + y);
             for (int x = 0; x < block.getBlockShape()[y].length; x++) {
-                System.out.println("x " + x);
                 int realX = x + block.getX();
                 int realY = block.getY();
                 if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || landedBlocks[realY][realX] != 0) {
@@ -114,12 +110,14 @@ public class BlockWorld extends JPanel {
                     if (isFalling == false) {
                         for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
                             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
-                                landedBlocks[y+currentBlock.getY()][x+currentBlock.getX()] =1;
+                                landedBlocks[currentBlock.getY()][currentBlock.getX()+x] =1;
                             }
                         }
                         Integer[][] otherShape = {{1, 1}};
                         currentBlock = new Rectangle(4, 0, shape);
+                        repaint();
                     }
+                    System.out.println(Arrays.deepToString(landedBlocks));
                     try {
                         Thread.sleep(2 * 1000);
                     } catch (InterruptedException ex) {
@@ -146,12 +144,13 @@ public class BlockWorld extends JPanel {
         super.paintComponent(graphics);
 
         Graphics2D g2d = (Graphics2D) graphics;
-
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
+                g2d.setColor(Color.DARK_GRAY);
+                g2d.drawRect(x*factor , y*factor , factor,  factor );
                 if (landedBlocks[y][x] != 0) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect(x * factor, y * factor, x + factor, y + factor);
+                    g2d.fillRect(x * factor, y * factor,  factor,  factor);
                 }
             }
         }

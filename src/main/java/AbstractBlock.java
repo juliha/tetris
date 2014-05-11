@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.Arrays;
 
 /**
@@ -44,11 +45,11 @@ public class AbstractBlock {
     }
 
     public void moveRight() {
-        this.x++;
+        x++;
     }
 
     public void moveLeft() {
-        this.x--;
+        x--;
     }
 
     public void moveDown() {
@@ -76,7 +77,7 @@ public class AbstractBlock {
 //      yInit = (int) Math.ceil(yInitNew);
 //      yEnd = (int) Math.ceil(yInit + width);
 //    }
-  }
+    }
 
 
 }
