@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
-import java.util.*;
+import java.util.Arrays;
 import java.util.Timer;
 
 
@@ -12,126 +12,164 @@ import java.util.Timer;
  */
 public class BlockWorld extends JPanel {
 
-  private int width =396;
-  private int height = 660;
-  private Grid grid;
-  private double factor = 396/12.0;
-  Color border = Color.LIGHT_GRAY;
-  private int speed;
-  java.util.Timer timer;
+    private int factor = 20;
+    private int width = 10 * factor;
+    private int height = 16 * factor;
+    private Grid grid;
+    Color border = Color.LIGHT_GRAY;
+    private int speed;
+    java.util.Timer timer;
+    private AbstractBlock currentBlock;
+    private Integer[][] landedBlocks;
 
+    BlockWorld() {
+        super();
 
-  BlockWorld() {
-    super();
+        timer = new Timer();
+        this.setPreferredSize(new Dimension(width, height));
+        this.setFocusable(true);
+        grid = new Grid();
+        final Graphics2D g2d = (Graphics2D) this.getGraphics();
 
-    timer = new Timer();
-    this.setPreferredSize(new Dimension(width, height));
-    this.setFocusable(true);
-    grid = new Grid();
-    final Graphics2D g2d = (Graphics2D) this.getGraphics();
-    this.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent keyEvent) {
-        System.err.println("Key typed "+ keyEvent.getKeyCode());
-      }
-      @Override
-      public void keyPressed(KeyEvent keyEvent) {
-        System.err.println("Key pressed "+ keyEvent.getKeyCode());
-      }
-      @Override
-      public void keyReleased(KeyEvent keyEvent) {
-        int code =keyEvent.getKeyCode();
-        switch (code) {
-          case KeyEvent.VK_LEFT :
-            grid.getLastRectangle().moveLeft();
-            break;
-          case KeyEvent.VK_RIGHT :
-            grid.getLastRectangle().moveRight();
-            break;
-          case KeyEvent.VK_UP :
-            grid.getLastRectangle().rotate();
-            break;
-          case KeyEvent.VK_DOWN :
-            grid.getLastRectangle().moveDown();
-            break;
+        landedBlocks = new Integer[16][10];
+        for (int i = 0; i < landedBlocks.length; i++) {
+            for (int j = 0; j < landedBlocks[i].length; j++) {
+                landedBlocks[i][j] = 0;
+            }
         }
-        repaint();
-      }
-    });
-    speed=2;
-  }
+        landedBlocks[5][1] = 1;
 
-  public void runGame() {
-    Thread gameThread = new Thread() {
-      public void run() {
-          int index =0;
-        Rectangle rectangle = new Rectangle(0, 4, 0, 1, Color.MAGENTA);
-        grid.addRectangle(rectangle);
-          index++;
-        while (true) {
-          update();
-          repaint();
-          if (rectangle.getyEnd() >= 20) {
-            rectangle = new Rectangle(0, 4, 0, 1, Color.blue);
-            grid.addRectangle(rectangle);
-          }
-          try {
-            Thread.sleep(2*1000);
-          } catch (InterruptedException ex) {}
-        }
-      }
-    };
-    gameThread.start();  // Invoke GaemThread.run()
-  }
-  public void moveCurrentBlock() {
-    grid.getLastRectangle().moveDown();
-  }
+        this.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent keyEvent) {
+            }
 
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+            }
 
-
-
-  public void update() {
-    moveCurrentBlock();
-  }
-
-
-  @Override
-  public void paintComponent(Graphics graphics) {
-    super.paintComponent(graphics);
-    Graphics2D g2d = (Graphics2D) graphics;
-    for (Rectangle rec : grid.getRectangles()) {
-      g2d.setColor(rec.getColor());
-       for (double i = rec.getxInit(); i< rec.getxEnd(); i++) {
-          System.err.println(i);
-          double x = i*factor;
-          double y = rec.getyInit()*factor;
-          double width = factor;
-           double height = (rec.getyEnd()-rec.getyInit())*factor;
-           g2d.fill(new Rectangle2D.Double(x,y,width,height));
-       }
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+                int code = keyEvent.getKeyCode();
+                AbstractBlock block = currentBlock.copyBlock();
+                switch (code) {
+                    case KeyEvent.VK_RIGHT:
+                        block.moveRight();
+                        if (moveIsPossible(block)) {
+                            currentBlock.moveRight();
+                        }
+                        break;
+                    case KeyEvent.VK_LEFT:
+                        block.moveLeft();
+                        if (moveIsPossible(block)) {
+                            currentBlock.moveLeft();
+                        }
+                        break;
+                    case KeyEvent.VK_UP:
+                        break;
+                    case KeyEvent.VK_DOWN:
+                        block.moveDown();
+                        if (moveIsPossible(block)) {
+                            currentBlock.moveDown();
+                        }
+                        break;
+                }
+                repaint();
+            }
+        });
+        speed = 2;
     }
 
-  }
+    private boolean moveIsPossible(AbstractBlock block) {
+        System.out.println(block.getBlockShape().length);
+        System.out.println(block.getBlockShape()[0].length);
+        for (int y = 0; y < block.getBlockShape().length ; y++) {
+            System.out.println("y " + y);
+            for (int x = 0; x < block.getBlockShape()[y].length; x++) {
+                System.out.println("x " + x);
+                int realX = x + block.getX();
+                int realY = block.getY();
+                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || landedBlocks[realY][realX] != 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isWithingBoundsX(int n) {
+        return n > -1 && n < landedBlocks[0].length;
+    }
+
+    private boolean isWithingBoundsY(int n) {
+        return n > -1 && n < landedBlocks.length;
+    }
+
+    public void runGame() {
+        Thread gameThread = new Thread() {
+            public void run() {
+                Integer[][] shape = {{1}};
+                currentBlock = new Rectangle(3, 2, shape);
+
+                while (true) {
+                    update();
+                    repaint();
+
+                    try {
+                        Thread.sleep(2 * 1000);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+            }
+        };
+        gameThread.start();  // Invoke GaemThread.run()
+    }
+
+    public void update() {
+
+    }
 
 
+    @Override
+    public void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
 
-  private void createAndShowGUI() {
-    JFrame frame = new JFrame("Bloxx");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.add(this);
-    runGame();
+        Graphics2D g2d = (Graphics2D) graphics;
 
-    frame.pack();
-    frame.setVisible(true);
-  }
+        for (int y = 0; y < landedBlocks.length; y++) {
+            for (int x = 0; x < landedBlocks[y].length; x++) {
+                if (landedBlocks[y][x] != 0) {
+                    g2d.setColor(Color.BLUE);
+                    g2d.fillRect(x * factor, y * factor, x + factor, y + factor);
+                }
+            }
+        }
 
-  public static void main(String[] args) {
-    javax.swing.SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {
-        BlockWorld grid = new BlockWorld();
-        grid.createAndShowGUI();
-      }
-    });
-  }
+        for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
+            for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
+                g2d.setColor(Color.BLUE);
+                g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
+            }
+        }
+    }
+
+
+    private void createAndShowGUI() {
+        JFrame frame = new JFrame("Bloxx");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(this);
+        runGame();
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                BlockWorld game = new BlockWorld();
+                game.createAndShowGUI();
+            }
+        });
+    }
 }

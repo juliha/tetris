@@ -5,9 +5,10 @@ import java.awt.*;
  */
 public class Rectangle extends AbstractBlock {
 
-  public Rectangle(int xInit, int xEnd, int yInit, int yEnd, Color color) {
-    super(xInit, xEnd, yInit, yEnd, color);
+  public Rectangle(int x,  int y, Integer[][] shape) {
+      super(x,y, shape);
   }
+
 }
 
 
