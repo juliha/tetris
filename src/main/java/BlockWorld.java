@@ -59,18 +59,15 @@ public class BlockWorld extends JPanel {
       }
     });
     speed=2;
-
-
-//    grid.addRectangle(new Rectangle(0,3,0,1, Color.BLUE));
-
   }
 
   public void runGame() {
-
     Thread gameThread = new Thread() {
       public void run() {
+          int index =0;
         Rectangle rectangle = new Rectangle(0, 4, 0, 1, Color.MAGENTA);
         grid.addRectangle(rectangle);
+          index++;
         while (true) {
           update();
           repaint();
@@ -86,14 +83,6 @@ public class BlockWorld extends JPanel {
     };
     gameThread.start();  // Invoke GaemThread.run()
   }
-
-
-
-
-
-
-
-
   public void moveCurrentBlock() {
     grid.getLastRectangle().moveDown();
   }
@@ -117,9 +106,8 @@ public class BlockWorld extends JPanel {
           double x = i*factor;
           double y = rec.getyInit()*factor;
           double width = factor;
-         double height = (rec.getyEnd()-rec.getyInit())*factor;
-
-          g2d.fill(new Rectangle2D.Double(x,y,width,height));
+           double height = (rec.getyEnd()-rec.getyInit())*factor;
+           g2d.fill(new Rectangle2D.Double(x,y,width,height));
        }
     }
 

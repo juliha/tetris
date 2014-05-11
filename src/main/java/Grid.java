@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Grid {
  private Integer[][] cells= new Integer[20][12];
   private List<Rectangle> rectangles;
+ private Rectangle current;
 
   public Grid() {
     for (int y = 0; y < cells.length; y++) {
@@ -18,7 +19,15 @@ public class Grid {
     rectangles = new CopyOnWriteArrayList<Rectangle>();
   }
 
-  public List<Rectangle> getRectangles() {
+    public Rectangle getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Rectangle current) {
+        this.current = current;
+    }
+
+    public List<Rectangle> getRectangles() {
     return rectangles;
   }
   public Integer[][] getCells() {
@@ -33,6 +42,15 @@ public class Grid {
   public void addRectangle(Rectangle rectangle) {
     rectangles.add(rectangle);
   }
+
+    public void addRectangleToGrid(Rectangle rectangle, int index) {
+        current = rectangle;
+        for (int y = (int) rectangle.getyInit();  y < rectangle.getyEnd(); y++) {
+            for (int x = (int) rectangle.getxInit(); x < rectangle.getxEnd(); x++) {
+                cells[y][x] = index;
+            }
+        }
+    }
 
   public void safeRectanglePosition(Rectangle rectangle) {
     int index = rectangles.indexOf(rectangle);

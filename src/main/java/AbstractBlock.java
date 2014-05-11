@@ -4,12 +4,12 @@ import java.awt.*;
 /**
  * Created by julia on 21.04.14.
  */
-public abstract class AbstractBlock extends JComponent {
+public abstract class AbstractBlock {
 
-  protected double xInit;
-  protected double xEnd;
-  protected double yInit;
-  protected double yEnd;
+  protected int xInit;
+  protected int xEnd;
+  protected int yInit;
+  protected int yEnd;
   protected Color color;
 
   protected double speed;
@@ -22,7 +22,7 @@ public abstract class AbstractBlock extends JComponent {
     this.xInit = xInit;
   }
 
-  public double getxInit() {
+    public double getxInit() {
     return xInit;
   }
 
@@ -81,14 +81,12 @@ public abstract class AbstractBlock extends JComponent {
     double yEndNew = yInitNew+width;
 
 
-    //TODO check if this position is still free
-
     if (xInitNew  >= 0 && xEndNew <= 12
-        && yEndNew <= 21) {
-      xInit = xInitNew;
-      xEnd = xInit + height;
-      yInit = yInitNew;
-      yEnd = yInit + width;
+        && yEndNew <= 20) {
+      xInit = (int) Math.ceil(xInitNew);
+      xEnd = (int) Math.ceil(xInit + height);
+      yInit = (int) Math.ceil(yInitNew);
+      yEnd = (int) Math.ceil(yInit + width);
     }
   }
 
@@ -127,12 +125,5 @@ public abstract class AbstractBlock extends JComponent {
   public void setSpeed(int speed) {
     this.speed = speed;
   }
-
-  //  @Override
-//  public void paintComponent(Graphics g) {
-//    Graphics2D g2d = (Graphics2D) g;
-//  }
-
-
 
 }
