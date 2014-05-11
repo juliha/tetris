@@ -57,26 +57,7 @@ public class AbstractBlock {
     }
 
     protected void rotate() {
-//    double width = xEnd-xInit;
-//    double height = yEnd-yInit;
-//
-//    double centerX = xInit+width/2;
-//    double centerY = yInit+(height/2);
-//
-//    double xInitNew = centerX-(height/2) ;
-//    double xEndNew = xInitNew+height;
-//
-//    double yInitNew =  centerY-(width/2);
-//    double yEndNew = yInitNew+width;
-//
-//
-//    if (xInitNew  >= 0 && xEndNew <= 12
-//        && yEndNew <= 20) {
-//      xInit = (int) Math.ceil(xInitNew);
-//      xEnd = (int) Math.ceil(xInit + height);
-//      yInit = (int) Math.ceil(yInitNew);
-//      yEnd = (int) Math.ceil(yInit + width);
-//    }
+       //TODO
     }
 
 
