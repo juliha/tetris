@@ -15,7 +15,6 @@ public class BlockWorld extends JPanel {
     private int factor = 20;
     private int width = 10 * factor;
     private int height = 16 * factor;
-    private Grid grid;
     Color border = Color.LIGHT_GRAY;
     private int speed;
     java.util.Timer timer;
@@ -28,7 +27,6 @@ public class BlockWorld extends JPanel {
         timer = new Timer();
         this.setPreferredSize(new Dimension(width, height));
         this.setFocusable(true);
-        grid = new Grid();
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
 
         landedBlocks = new Integer[16][10];
@@ -37,7 +35,6 @@ public class BlockWorld extends JPanel {
                 landedBlocks[i][j] = 0;
             }
         }
-        landedBlocks[5][1] = 1;
 
         this.addKeyListener(new KeyListener() {
             @Override
@@ -108,13 +105,21 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                Integer[][] shape = {{1}};
-                currentBlock = new Rectangle(3, 2, shape);
+                Integer[][] shape = {{1,1}};
+                currentBlock = new Rectangle(4, 0, shape);
 
                 while (true) {
-                    update();
+                    boolean isFalling =update();
                     repaint();
-
+                    if (isFalling == false) {
+                        for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
+                            for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
+                                landedBlocks[y+currentBlock.getY()][x+currentBlock.getX()] =1;
+                            }
+                        }
+                        Integer[][] otherShape = {{1, 1}};
+                        currentBlock = new Rectangle(4, 0, shape);
+                    }
                     try {
                         Thread.sleep(2 * 1000);
                     } catch (InterruptedException ex) {
@@ -125,8 +130,14 @@ public class BlockWorld extends JPanel {
         gameThread.start();  // Invoke GaemThread.run()
     }
 
-    public void update() {
-
+    public boolean update() {
+        AbstractBlock block = currentBlock.copyBlock();
+        block.moveDown();
+        if (!moveIsPossible(block)) {
+            return false;
+        }
+        currentBlock.moveDown();
+        return true;
     }
 
 
@@ -152,7 +163,6 @@ public class BlockWorld extends JPanel {
             }
         }
     }
-
 
     private void createAndShowGUI() {
         JFrame frame = new JFrame("Bloxx");
