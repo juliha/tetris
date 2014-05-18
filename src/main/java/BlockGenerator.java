@@ -18,5 +18,10 @@ public class BlockGenerator {
 
     public static final List<int[][]> possibleShapes =ImmutableList.of(quad, rect, lShape1, lShape2, tShape, zShape1, zShape2);
 
+    public static int[][] getRandomShape() {
+        double high = possibleShapes.size()-1;
+        int i = (int) (Math.random() * (high));
+        return possibleShapes.get(i);
+    }
 
 }

@@ -107,7 +107,7 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                int[][] shape = {{1, 1, 0},{0,1,1}};
+                int[][] shape = BlockGenerator.getRandomShape();
                 currentBlock = new Rectangle(4, 0, shape);
 
                 while (true) {
@@ -115,14 +115,9 @@ public class BlockWorld extends JPanel {
                     repaint();
                     if (isFalling == false) {
                         int[][] blockShape = currentBlock.getBlockShape();
-                        for (int y = 0; y < blockShape.length; y++) {
-                            for (int x = 0; x < blockShape[y].length; x++) {
-                                if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
-                                    landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] =blockShape[y][x];
-                                }
-                            }
-                        }
+                        landBlock(blockShape);
 
+                        shape = BlockGenerator.getRandomShape();
                         currentBlock = new Rectangle(4, 0, shape);
                         repaint();
                     }
@@ -135,6 +130,16 @@ public class BlockWorld extends JPanel {
             }
         };
         gameThread.start();  // Invoke GaemThread.run()
+    }
+
+    private void landBlock(int[][] blockShape) {
+        for (int y = 0; y < blockShape.length; y++) {
+            for (int x = 0; x < blockShape[y].length; x++) {
+                if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
+                    landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] =blockShape[y][x];
+                }
+            }
+        }
     }
 
     public boolean update() {
