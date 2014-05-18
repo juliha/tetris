@@ -119,7 +119,6 @@ public class BlockWorld extends JPanel {
                             for (int x = 0; x < blockShape[y].length; x++) {
                                 if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
                                     landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] =blockShape[y][x];
-
                                 }
                             }
                         }
