@@ -4,7 +4,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.*;
+import java.util.List;
 import java.util.Timer;
 
 
@@ -107,8 +108,8 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                int[][] shape = BlockGenerator.getRandomShape();
-                currentBlock = new Rectangle(4, 0, shape);
+                List<int[][]> shape = BlockGenerator.getRandomShape();
+                currentBlock = new Rectangle(4, 0, shape, 0);
 
                 while (true) {
                     boolean isFalling = update();
@@ -118,7 +119,7 @@ public class BlockWorld extends JPanel {
                         landBlock(blockShape);
 
                         shape = BlockGenerator.getRandomShape();
-                        currentBlock = new Rectangle(4, 0, shape);
+                        currentBlock = new Rectangle(4, 0, shape, 0);
                         repaint();
                     }
                    // System.out.println(Arrays.deepToString(landedBlocks));

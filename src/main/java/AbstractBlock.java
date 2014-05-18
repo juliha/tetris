@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by julia on 21.04.14.
@@ -9,16 +11,21 @@ public class AbstractBlock {
 
     protected int x;
     protected int y;
-    protected int[][] blockShape;
+    int orientation;
+    List<int[][]> blockShapes;
+   // protected int[][] blockShape;
 
-    protected AbstractBlock(int x, int y, int[][] shape) {
+    protected AbstractBlock(int x, int y, List<int[][]> shapes, int orientation) {
         this.x = x;
         this.y = y;
-        this.blockShape = shape;
+        this.blockShapes = shapes;
+        this.orientation = orientation;
     }
 
     public AbstractBlock copyBlock() {
-        return new AbstractBlock(this.x, this.y, this.blockShape.clone());
+        List<int[][]> blocks = new ArrayList<int[][]>();
+        blocks.addAll(blockShapes);
+        return new AbstractBlock(this.x, this.y,blocks, orientation);
     }
 
     public int getX() {
@@ -38,11 +45,7 @@ public class AbstractBlock {
     }
 
     public int[][] getBlockShape() {
-        return blockShape;
-    }
-
-    public void setBlockShape(int[][] blockShape) {
-        this.blockShape = blockShape;
+        return blockShapes.get(orientation);
     }
 
     public void moveRight() {
@@ -58,18 +61,21 @@ public class AbstractBlock {
     }
 
     protected void rotate() {
-        if (blockShape.length >= 0) {
-            int[][] tmp = new int[blockShape[0].length][blockShape.length];
-
-            for (int i = 0; i < blockShape.length; i++) {
-                for (int j = 0; j < blockShape[i].length; j++) {
-                    tmp[j][i] = blockShape[i][j];
-                }
-            }
-            System.out.println(Arrays.deepToString(tmp));
-            blockShape = tmp;
-
+        if (orientation == 3) {
+            orientation =0;
+        } else {
+            orientation++;
         }
+//        if (blockShape.length >= 0) {
+//            int[][] tmp = new int[blockShape[0].length][blockShape.length];
+//            for (int i = 0; i < blockShape.length; i++) {
+//                for (int j = blockShape[i].length - 1; j > 0; j--) {
+//                    tmp[j][i] = blockShape[i][j];
+//                }
+//            }
+//            System.out.println(Arrays.deepToString(tmp));
+//            blockShape = tmp;
+//        }
     }
 
 

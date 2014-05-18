@@ -8,18 +8,50 @@ import java.util.List;
  */
 public class BlockGenerator {
 
-    public static final int[][] quad = {{1,1}, {1,1}};
-    public static final int[][] rect = {{1,1,1,1}};
-    public static final int[][] rect2 = {{1},{1},{1},{1}};
-    public static final int[][] lShape1 = {{1,0,0},{1 ,1, 1}};
-    public static final int[][] lShape2 = {{0,0,1},{1 ,1, 1}};
-    public static final int[][] tShape = {{0,1,0},{1 ,1, 1}};
-    public static final int[][] zShape1 = {{1,1,0},{0 ,1, 1}};
-    public static final int[][] zShape2 = {{0,1,1},{1 ,1, 0}};
+    public static final int[][] quad0 = {{1,1}, {1,1}};
+    public static final int[][] quad1 = {{1,1}, {1,1}};
+    public static final int[][] quad2 = {{1,1}, {1,1}};
+    public static final int[][] quad3 = {{1,1}, {1,1}};
+    public static final List<int[][]> quad = ImmutableList.of(quad0, quad1, quad2, quad3);
+    public static final int[][] rect0 = {{1,1,1,1}};
+    public static final int[][] rect1 = {{1},{1},{1},{1}};
+    public static final int[][] rect2 = {{1,1,1,1}};
+    public static final int[][] rect3 = {{1},{1},{1},{1}};
+    public static final List<int[][]> rect = ImmutableList.of(rect0, rect1, rect2, rect3);
+    public static final int[][] lShape10 = {{1,0,0},{1 ,1, 1}};
+    public static final int[][] lShape11 = {{1,1},{1,0} ,{1,0}};
+    public static final int[][] lShape12 = {{1,1,1},{0 ,0, 1}};
+    public static final int[][] lShape13 = {{0,1},{0,1},{1, 1}};
+    public static final List<int[][]> lShape1 = ImmutableList.of(lShape10, lShape11, lShape12, lShape13);
 
-    public static final List<int[][]> possibleShapes =ImmutableList.of(quad, rect, lShape1, rect2, lShape2, tShape, zShape1, zShape2);
+    public static final int[][] lShape20 = {{0,0,1},{1 ,1, 1}};
+    public static final int[][] lShape21 = {{1,0}, {1,0}, {1,1}};
+    public static final int[][] lShape22 = {{1,1,1},{0 ,0, 1}};
+    public static final int[][] lShape23 = {{1,1},{0 ,1}, {0, 1}};
+    public static final List<int[][]> lShape2 = ImmutableList.of(lShape20, lShape21, lShape22, lShape23);
 
-    public static int[][] getRandomShape() {
+    public static final int[][] tShape0 = {{0,1,0},{1 ,1, 1}};
+    public static final int[][] tShape1 = {{1,0}, {1,1},{1,0}};
+    public static final int[][] tShape2 = {{1,1,1},{0 ,1, 0}};
+    public static final int[][] tShape3 = {{0,1},{1,1},{0 ,1}};
+    public static final List<int[][]> tShape = ImmutableList.of(tShape0, tShape1, tShape2, tShape3);
+
+    public static final int[][] zShape10 = {{1,1,0},{0 ,1, 1}};
+    public static final int[][] zShape11 = {{0,1}, {1,1},{1 ,0}};
+    public static final int[][] zShape12 = {{1,1,0},{0 ,1, 1}};
+    public static final int[][] zShape13 = {{1,1,0},{0 ,1, 1}};
+    public static final List<int[][]> zShape1 = ImmutableList.of(zShape10, zShape11, zShape12, zShape13);
+
+    public static final int[][] zShape20 = {{0,1,1},{1 ,1, 0}};
+    public static final int[][] zShape21 = {{1,0}, {1,1} ,{0, 1}};
+    public static final int[][] zShape22 = {{0,1,1},{1 ,1, 0}};
+    public static final int[][] zShape23 = {{1,0}, {1,1} ,{0, 1}};
+
+    public static final List<int[][]> zShape2 = ImmutableList.of(zShape20, zShape21, zShape22, zShape23);
+
+    public static final List<List<int[][]>> possibleShapes =ImmutableList.of(quad, rect, lShape1 , lShape2, tShape,  zShape1, zShape2);
+
+    public static List<int[][]> getRandomShape() {
         double high = possibleShapes.size()-1;
         int i = (int) (Math.random() * (high));
         return possibleShapes.get(i);
