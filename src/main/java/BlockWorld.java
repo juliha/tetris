@@ -117,7 +117,10 @@ public class BlockWorld extends JPanel {
                         int[][] blockShape = currentBlock.getBlockShape();
                         for (int y = 0; y < blockShape.length; y++) {
                             for (int x = 0; x < blockShape[y].length; x++) {
-                                landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] = blockShape[y][x];
+                                if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
+                                    landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] =blockShape[y][x];
+
+                                }
                             }
                         }
 
@@ -152,15 +155,13 @@ public class BlockWorld extends JPanel {
         Graphics2D g2d = (Graphics2D) graphics;
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
-
+                g2d.setColor(Color.lightGray);
+                g2d.drawRect(x * factor, y * factor, factor, factor);
                 if (landedBlocks[y][x] == 1) {
-                    g2d.setColor(Color.YELLOW);
+                    g2d.setColor(Color.BLUE);
                     g2d.fillRect(x * factor, y * factor, factor, factor);
                 }
-                g2d.setColor(Color.DARK_GRAY);
-                g2d.drawRect(x * factor, y * factor, factor, factor);
-                String str = String.valueOf(landedBlocks[y][x]);
-                g2d.drawString(str, x*factor +(factor/2), y*factor +(factor/2) );
+
             }
         }
 
