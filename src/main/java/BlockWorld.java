@@ -83,11 +83,12 @@ public class BlockWorld extends JPanel {
     }
 
     private boolean moveIsPossible(AbstractBlock block) {
-        for (int y = 0; y < block.getBlockShape().length; y++) {
-            for (int x = 0; x < block.getBlockShape()[y].length; x++) {
+        int[][] blockShape = block.getBlockShape();
+        for (int y = 0; y < blockShape.length; y++) {
+            for (int x = 0; x < blockShape[y].length; x++) {
                 int realX = x + block.getX();
-                int realY = block.getY();
-                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || landedBlocks[realY][realX] != 0) {
+                int realY = y + block.getY();
+                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || ( blockShape[y][x] == 1 &&landedBlocks[realY][realX] == 1)) {
                     return false;
                 }
             }
@@ -113,12 +114,13 @@ public class BlockWorld extends JPanel {
                     boolean isFalling = update();
                     repaint();
                     if (isFalling == false) {
-                        for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
-                            for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
-                                landedBlocks[currentBlock.getY()][currentBlock.getX() + x] = 1;
+                        int[][] blockShape = currentBlock.getBlockShape();
+                        for (int y = 0; y < blockShape.length; y++) {
+                            for (int x = 0; x < blockShape[y].length; x++) {
+                                landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] = blockShape[y][x];
                             }
                         }
-                        Integer[][] otherShape = {{1, 1}};
+
                         currentBlock = new Rectangle(4, 0, shape);
                         repaint();
                     }
@@ -150,12 +152,15 @@ public class BlockWorld extends JPanel {
         Graphics2D g2d = (Graphics2D) graphics;
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
-                g2d.setColor(Color.DARK_GRAY);
-                g2d.drawRect(x * factor, y * factor, factor, factor);
-                if (landedBlocks[y][x] != 0) {
-                    g2d.setColor(Color.BLUE);
+
+                if (landedBlocks[y][x] == 1) {
+                    g2d.setColor(Color.YELLOW);
                     g2d.fillRect(x * factor, y * factor, factor, factor);
                 }
+                g2d.setColor(Color.DARK_GRAY);
+                g2d.drawRect(x * factor, y * factor, factor, factor);
+                String str = String.valueOf(landedBlocks[y][x]);
+                g2d.drawString(str, x*factor +(factor/2), y*factor +(factor/2) );
             }
         }
 
@@ -164,7 +169,7 @@ public class BlockWorld extends JPanel {
             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
                 int[][] blockShape = currentBlock.getBlockShape();
                 System.out.println(blockShape[y][x]);
-                if ( blockShape[y][x] != 0) {
+                if ( blockShape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
                     g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
 
