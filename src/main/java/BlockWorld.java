@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Timer;
 
@@ -63,6 +64,10 @@ public class BlockWorld extends JPanel {
                         }
                         break;
                     case KeyEvent.VK_UP:
+                            block.rotate();
+                        if (moveIsPossible(block)) {
+                                currentBlock.rotate();
+                        }
                         break;
                     case KeyEvent.VK_DOWN:
                         block.moveDown();
@@ -78,7 +83,7 @@ public class BlockWorld extends JPanel {
     }
 
     private boolean moveIsPossible(AbstractBlock block) {
-        for (int y = 0; y < block.getBlockShape().length ; y++) {
+        for (int y = 0; y < block.getBlockShape().length; y++) {
             for (int x = 0; x < block.getBlockShape()[y].length; x++) {
                 int realX = x + block.getX();
                 int realY = block.getY();
@@ -101,23 +106,23 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                Integer[][] shape = {{1,1}};
+                int[][] shape = {{1, 1, 0},{0,1,1}};
                 currentBlock = new Rectangle(4, 0, shape);
 
                 while (true) {
-                    boolean isFalling =update();
+                    boolean isFalling = update();
                     repaint();
                     if (isFalling == false) {
                         for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
                             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
-                                landedBlocks[currentBlock.getY()][currentBlock.getX()+x] =1;
+                                landedBlocks[currentBlock.getY()][currentBlock.getX() + x] = 1;
                             }
                         }
                         Integer[][] otherShape = {{1, 1}};
                         currentBlock = new Rectangle(4, 0, shape);
                         repaint();
                     }
-                    System.out.println(Arrays.deepToString(landedBlocks));
+                   // System.out.println(Arrays.deepToString(landedBlocks));
                     try {
                         Thread.sleep(2 * 1000);
                     } catch (InterruptedException ex) {
@@ -138,7 +143,6 @@ public class BlockWorld extends JPanel {
         return true;
     }
 
-
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -147,18 +151,24 @@ public class BlockWorld extends JPanel {
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
                 g2d.setColor(Color.DARK_GRAY);
-                g2d.drawRect(x*factor , y*factor , factor,  factor );
+                g2d.drawRect(x * factor, y * factor, factor, factor);
                 if (landedBlocks[y][x] != 0) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect(x * factor, y * factor,  factor,  factor);
+                    g2d.fillRect(x * factor, y * factor, factor, factor);
                 }
             }
         }
 
+
         for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
-                g2d.setColor(Color.BLUE);
-                g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
+                int[][] blockShape = currentBlock.getBlockShape();
+                System.out.println(blockShape[y][x]);
+                if ( blockShape[y][x] != 0) {
+                    g2d.setColor(Color.BLUE);
+                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
+
+                }
             }
         }
     }

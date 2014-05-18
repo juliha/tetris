@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 /**
@@ -8,9 +9,9 @@ public class AbstractBlock {
 
     protected int x;
     protected int y;
-    protected Integer[][] blockShape;
+    protected int[][] blockShape;
 
-    protected AbstractBlock(int x, int y, Integer[][] shape) {
+    protected AbstractBlock(int x, int y, int[][] shape) {
         this.x = x;
         this.y = y;
         this.blockShape = shape;
@@ -36,11 +37,11 @@ public class AbstractBlock {
         this.y = y;
     }
 
-    public Integer[][] getBlockShape() {
+    public int[][] getBlockShape() {
         return blockShape;
     }
 
-    public void setBlockShape(Integer[][] blockShape) {
+    public void setBlockShape(int[][] blockShape) {
         this.blockShape = blockShape;
     }
 
@@ -57,7 +58,18 @@ public class AbstractBlock {
     }
 
     protected void rotate() {
-       //TODO
+        if (blockShape.length >= 0) {
+            int[][] tmp = new int[blockShape[0].length][blockShape.length];
+
+            for (int i = 0; i < blockShape.length; i++) {
+                for (int j = 0; j < blockShape[i].length; j++) {
+                    tmp[j][i] = blockShape[i][j];
+                }
+            }
+            System.out.println(Arrays.deepToString(tmp));
+            blockShape = tmp;
+
+        }
     }
 
 
