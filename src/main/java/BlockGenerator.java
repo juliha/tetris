@@ -26,7 +26,7 @@ public class BlockGenerator {
 
     public static final int[][] lShape20 = {{0,0,1},{1 ,1, 1}};
     public static final int[][] lShape21 = {{1,0}, {1,0}, {1,1}};
-    public static final int[][] lShape22 = {{1,1,1},{0 ,0, 1}};
+    public static final int[][] lShape22 = {{1,1,1},{1 ,0, 0}};
     public static final int[][] lShape23 = {{1,1},{0 ,1}, {0, 1}};
     public static final List<int[][]> lShape2 = ImmutableList.of(lShape20, lShape21, lShape22, lShape23);
 

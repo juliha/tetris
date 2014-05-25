@@ -21,7 +21,7 @@ public class BlockWorld extends JPanel {
     private int speed;
     java.util.Timer timer;
     private AbstractBlock currentBlock;
-    private Integer[][] landedBlocks;
+    private int[][] landedBlocks;
 
     BlockWorld() {
         super();
@@ -31,7 +31,7 @@ public class BlockWorld extends JPanel {
         this.setFocusable(true);
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
 
-        landedBlocks = new Integer[16][10];
+        landedBlocks = new int[16][10];
         for (int i = 0; i < landedBlocks.length; i++) {
             for (int j = 0; j < landedBlocks[i].length; j++) {
                 landedBlocks[i][j] = 0;
@@ -65,9 +65,9 @@ public class BlockWorld extends JPanel {
                         }
                         break;
                     case KeyEvent.VK_UP:
-                            block.rotate();
+                        block.rotate();
                         if (moveIsPossible(block)) {
-                                currentBlock.rotate();
+                            currentBlock.rotate();
                         }
                         break;
                     case KeyEvent.VK_DOWN:
@@ -83,13 +83,44 @@ public class BlockWorld extends JPanel {
         speed = 2;
     }
 
+    private int removeFull(int i) {
+        while (i < landedBlocks.length) {
+            int max = landedBlocks[i].length;
+            int c = 0;
+            for (int j = 0; j < max; j++) {
+                if (landedBlocks[i][j] == 1) {
+                    c++;
+                }
+            }
+            if (c == max) {
+                removeRow(i);
+                removeFull(i);
+            }
+            i++;
+        }
+        return i;
+    }
+
+    private void removeRow(int i) {
+        int[][] newLandedBlocks = new int[landedBlocks.length][landedBlocks[0].length];
+        for (int j = 0; j < newLandedBlocks.length ; j++) {
+            if (j < i) {
+                newLandedBlocks[j + 1] = landedBlocks[j];
+            }
+            if (j > i) {
+                newLandedBlocks[j] =landedBlocks[j];
+            }
+        }
+        landedBlocks = newLandedBlocks;
+    }
+
     private boolean moveIsPossible(AbstractBlock block) {
         int[][] blockShape = block.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
                 int realX = x + block.getX();
                 int realY = y + block.getY();
-                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || ( blockShape[y][x] == 1 &&landedBlocks[realY][realX] == 1)) {
+                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || (blockShape[y][x] == 1 && landedBlocks[realY][realX] == 1)) {
                     return false;
                 }
             }
@@ -117,12 +148,25 @@ public class BlockWorld extends JPanel {
                     if (isFalling == false) {
                         int[][] blockShape = currentBlock.getBlockShape();
                         landBlock(blockShape);
+                        try {
+                            SwingUtilities.invokeAndWait(new Runnable() {
+                                @Override
+                                public void run() {
+                                    removeFull(0);
+                                }
+                            });
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+
 
                         shape = BlockGenerator.getRandomShape();
                         currentBlock = new Rectangle(4, 0, shape, 0);
                         repaint();
                     }
-                   // System.out.println(Arrays.deepToString(landedBlocks));
+                    // System.out.println(Arrays.deepToString(landedBlocks));
                     try {
                         Thread.sleep(2 * 1000);
                     } catch (InterruptedException ex) {
@@ -137,7 +181,7 @@ public class BlockWorld extends JPanel {
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
                 if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
-                    landedBlocks[currentBlock.getY()+y][currentBlock.getX() + x] =blockShape[y][x];
+                    landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] = blockShape[y][x];
                 }
             }
         }
@@ -175,7 +219,7 @@ public class BlockWorld extends JPanel {
             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
                 int[][] blockShape = currentBlock.getBlockShape();
                 System.out.println(blockShape[y][x]);
-                if ( blockShape[y][x] == 1) {
+                if (blockShape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
                     g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
 
