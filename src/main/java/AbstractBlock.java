@@ -66,17 +66,5 @@ public class AbstractBlock {
         } else {
             orientation++;
         }
-//        if (blockShape.length >= 0) {
-//            int[][] tmp = new int[blockShape[0].length][blockShape.length];
-//            for (int i = 0; i < blockShape.length; i++) {
-//                for (int j = blockShape[i].length - 1; j > 0; j--) {
-//                    tmp[j][i] = blockShape[i][j];
-//                }
-//            }
-//            System.out.println(Arrays.deepToString(tmp));
-//            blockShape = tmp;
-//        }
     }
-
-
 }
