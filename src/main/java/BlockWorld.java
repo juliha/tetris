@@ -209,6 +209,8 @@ public class BlockWorld extends JPanel {
                 if (landedBlocks[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
                     g2d.fillRect(x * factor, y * factor, factor, factor);
+                    g2d.setColor(Color.lightGray);
+                    g2d.drawRect(x * factor, y * factor, factor, factor);
                 }
 
             }
@@ -221,7 +223,9 @@ public class BlockWorld extends JPanel {
                 System.out.println(blockShape[y][x]);
                 if (blockShape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, x + factor, y + factor);
+                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor,  factor, factor);
+                    g2d.setColor(Color.LIGHT_GRAY);
+                    g2d.drawRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, factor,  factor);
 
                 }
             }
