@@ -45,10 +45,6 @@ public class BlockWorld extends JPanel {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
-            }
-
-            @Override
-            public void keyReleased(KeyEvent keyEvent) {
                 int code = keyEvent.getKeyCode();
                 AbstractBlock block = currentBlock.copyBlock();
                 switch (code) {
@@ -78,6 +74,11 @@ public class BlockWorld extends JPanel {
                         break;
                 }
                 repaint();
+            }
+
+            @Override
+            public void keyReleased(KeyEvent keyEvent) {
+
             }
         });
         speed = 2;
