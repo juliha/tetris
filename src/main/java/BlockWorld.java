@@ -81,7 +81,7 @@ public class BlockWorld extends JPanel {
 
             }
         });
-        speed = 2;
+        speed = 6;
     }
 
     private int removeFull(int i) {

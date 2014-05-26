@@ -43,13 +43,13 @@ public class BlockGenerator {
     public static final List<int[][]> zShape1 = ImmutableList.of(zShape10, zShape11, zShape12, zShape13);
 
     public static final int[][] zShape20 = {{0,1,1},{1 ,1, 0}};
-    public static final int[][] zShape21 = {{1,0}, {1,1} ,{0, 1}};
+    public static final int[][] zShape21 = {{0,1}, {1,1} ,{1, 0}};
     public static final int[][] zShape22 = {{0,1,1},{1 ,1, 0}};
-    public static final int[][] zShape23 = {{1,0}, {1,1} ,{0, 1}};
+    public static final int[][] zShape23 = {{0,1}, {1,1} ,{0, 1}};
 
     public static final List<int[][]> zShape2 = ImmutableList.of(zShape20, zShape21, zShape22, zShape23);
 
-    public static final List<List<int[][]>> possibleShapes =ImmutableList.of(quad, rect, lShape1 , lShape2, tShape,  zShape1, zShape2);
+    public static final List<List<int[][]>> possibleShapes =ImmutableList.of(quad, rect,lShape1 , lShape2, tShape, zShape1, zShape2);
 
     public static List<int[][]> getRandomShape() {
         double high = possibleShapes.size()-1;

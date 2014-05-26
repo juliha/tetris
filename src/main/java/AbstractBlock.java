@@ -13,7 +13,7 @@ public class AbstractBlock {
     protected int y;
     int orientation;
     List<int[][]> blockShapes;
-   // protected int[][] blockShape;
+    // protected int[][] blockShape;
 
     protected AbstractBlock(int x, int y, List<int[][]> shapes, int orientation) {
         this.x = x;
@@ -25,7 +25,7 @@ public class AbstractBlock {
     public AbstractBlock copyBlock() {
         List<int[][]> blocks = new ArrayList<int[][]>();
         blocks.addAll(blockShapes);
-        return new AbstractBlock(this.x, this.y,blocks, orientation);
+        return new AbstractBlock(this.x, this.y, blocks, orientation);
     }
 
     public int getX() {
@@ -61,10 +61,25 @@ public class AbstractBlock {
     }
 
     protected void rotate() {
+        int[][] shape = blockShapes.get(orientation);
+
+        double width = ((int) shape[0].length)/2;
+        double height = ((int) shape.length)/2;
+
+        if (orientation % 2 == 0) {
+            x = x + (int) (width / 2);
+            y = y - (int) (width / 2);
+        } else {
+            x = x - (int) (height / 2);
+            y = y + (int) (height / 2);
+        }
         if (orientation == 3) {
-            orientation =0;
+
+            orientation = 0;
         } else {
             orientation++;
         }
+
+
     }
 }
