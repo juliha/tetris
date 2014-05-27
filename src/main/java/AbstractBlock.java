@@ -7,29 +7,23 @@ import java.util.List;
 /**
  * Created by julia on 21.04.14.
  */
-public class AbstractBlock {
+abstract class AbstractBlock {
 
     protected int x;
     protected int y;
     protected int centerX;
     protected int centerY;
     int orientation;
-    List<int[][]> blockShapes;
     protected int[][] blockShape;
 
-    protected AbstractBlock(int x, int y,  int centerX, int centerY, List<int[][]> shapes, int orientation) {
+    protected AbstractBlock(int x, int y,  int centerX, int centerY, int[][] shape, int orientation) {
         this.x = x;
         this.y = y;
-        this.blockShapes = shapes;
-        blockShape = shapes.get(0);
+        this.blockShape =shape;
         this.orientation = orientation;
     }
 
-    public AbstractBlock copyBlock() {
-        List<int[][]> blocks = new ArrayList<int[][]>();
-        blocks.addAll(blockShapes);
-        return new AbstractBlock(this.x, this.y, this.centerX, this.centerY, blocks, orientation);
-    }
+    public abstract AbstractBlock copyBlock() ;
 
     public int getCenterX() {
         return centerX;
@@ -60,13 +54,10 @@ public class AbstractBlock {
     }
 
     public int[][] getBlockShape() {
-        return blockShapes.get(orientation);
-
-    }
-
-    public int[][] getSingleBlockShape() {
         return blockShape;
+
     }
+
 
     public void moveRight() {
         x++;
@@ -80,41 +71,10 @@ public class AbstractBlock {
         this.y++;
     }
 
-    protected void rotate() {
-//        int[][] shape = blockShapes.get(orientation);
-//        int width = shape[0].length;
-//        int height = shape.length;
-//        int[][] newShape = new int[width][height];
-//
-//        double angle = Math.toRadians(90.0);
-//        double x0 = 0.5 *(width-1);
-//        double y0 = 0.5 * (height-1);
-//
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                double a = x-x0;
-//                double b = y-y0;
-//                int xNew = (int) (+a * Math.cos(angle) -b * Math.sin(angle) + x0);
-//                int yNew = (int) (+a * Math.sin(angle) + b * Math.cos(angle) + y0);
-//                System.out.println("new X " +xNew);
-//                System.out.println("new Y " + yNew);
-//
-//                newShape[x][y] = blockShape[xNew][yNew];
-//
-//            }
-//        }
-//        blockShape = newShape;
-//
-//
-//        System.out.println(Arrays.deepToString(newShape));
+    public abstract void rotate();
 
 
-        if (orientation == 3) {
-            orientation = 0;
-        } else {
-            orientation++;
-        }
 
 
-    }
+
 }

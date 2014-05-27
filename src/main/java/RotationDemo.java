@@ -24,10 +24,10 @@ public class RotationDemo extends JComponent {
         //shape = new int[][]{{1, 0, 0}, {1, 1, 1}};
        // shape = new int[][]{{0, 0, 1}, {1, 1, 1}};
         //shape = new int[][]{{0, 1, 0}, {1, 1, 1}};
-        //shape = new int[][]{{0, 1, 1}, {1, 1, 0}};
-        shape = new int[][]{{1, 1, 1, 1}};
-        centerX=1;
-        centerY=1;
+//        shape = new int[][]{{0, 1, 1}, {1, 1, 0}};
+        shape = new int[][]{{1, 1, 1,1}};
+        centerX=2;
+        centerY=0;
         x=5;
         y=5;
 
@@ -76,7 +76,7 @@ public class RotationDemo extends JComponent {
                     g2d.setColor(Color.BLUE);
                     g2d.fillRect( (this.x-centerX+ x) * factor, (this.y-centerY +y) * factor,  factor, factor);
                     g2d.setColor(Color.lightGray);
-                    g2d.fillRect((this.x - centerX + x) * factor, (this.y - centerY + y) * factor, factor, factor);
+                    g2d.drawRect((this.x - centerX + x) * factor, (this.y - centerY + y) * factor, factor, factor);
 
                 }
             }
@@ -108,17 +108,21 @@ public class RotationDemo extends JComponent {
         orientation++;
         switch (orientation) {
             case 1 :
-                centerX--;
+               centerX -=2;
+                centerY +=2;
                 break;
             case 2 :
-               centerY--;
-                centerX++;
+               centerY-=2;
+                centerX+=2;
                break;
             case 3 :
-                centerY++;
+                centerX -= 2;
+                centerY +=2;
                 break;
             case 4 :
                 orientation =0;
+                centerX +=2;
+                centerY -=2;
                 break;
         }
 

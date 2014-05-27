@@ -140,8 +140,9 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                List<int[][]> shape = BlockGenerator.getRandomShape();
-                currentBlock = new Rectangle(4, 0, 1, 1, shape, 0);
+                //List<int[][]> shape = BlockGenerator.getRandomShape();
+
+                currentBlock = new LShape(4, 0, 0);
 
                 while (true) {
                     boolean isFalling = update();
@@ -163,8 +164,8 @@ public class BlockWorld extends JPanel {
                         }
 
 
-                        shape = BlockGenerator.getRandomShape();
-                        currentBlock = new Rectangle(4, 0, 1,1, shape, 0);
+                        //shape = BlockGenerator.getRandomShape();
+                        currentBlock = new LShape(4, 0, 0);
                         repaint();
                     }
                     // System.out.println(Arrays.deepToString(landedBlocks));
