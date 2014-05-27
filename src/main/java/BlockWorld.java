@@ -81,7 +81,7 @@ public class BlockWorld extends JPanel {
 
             }
         });
-        speed = 6;
+        speed = 1;
     }
 
     private int removeFull(int i) {
@@ -140,9 +140,8 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                //List<int[][]> shape = BlockGenerator.getRandomShape();
+                currentBlock = BlockGenerator.getRandomShape();
 
-                currentBlock = new LShape(4, 0, 0);
 
                 while (true) {
                     boolean isFalling = update();
@@ -164,8 +163,7 @@ public class BlockWorld extends JPanel {
                         }
 
 
-                        //shape = BlockGenerator.getRandomShape();
-                        currentBlock = new LShape(4, 0, 0);
+                        currentBlock = BlockGenerator.getRandomShape();
                         repaint();
                     }
                     // System.out.println(Arrays.deepToString(landedBlocks));
