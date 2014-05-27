@@ -7,7 +7,7 @@ public class TShape extends ThreeOnTwoBlock {
     }
 
     public TShape(int x, int y, int orientation) {
-        super(x, y, orientation);
+        super(x, y, 1,1, new int[][] {{0,1,0},{1,1,1}}, orientation);
     }
 
     @Override

@@ -38,7 +38,7 @@ abstract class AbstractBlock {
     }
 
     public int getX() {
-        return x;
+        return x-getCenterX();
     }
 
     public void setX(int x) {
@@ -46,7 +46,7 @@ abstract class AbstractBlock {
     }
 
     public int getY() {
-        return y;
+        return y-getCenterY();
     }
 
     public void setY(int y) {

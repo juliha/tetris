@@ -85,6 +85,7 @@ public class BlockWorld extends JPanel {
     }
 
     private int removeFull(int i) {
+        System.out.println("in remove Full");
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
             int c = 0;
@@ -142,10 +143,10 @@ public class BlockWorld extends JPanel {
             public void run() {
                 currentBlock = BlockGenerator.getRandomShape();
 
-
                 while (true) {
                     boolean isFalling = update();
                     repaint();
+                    System.out.println("is falling " +isFalling);
                     if (isFalling == false) {
                         int[][] blockShape = currentBlock.getBlockShape();
                         landBlock(blockShape);
@@ -161,9 +162,8 @@ public class BlockWorld extends JPanel {
                         } catch (InvocationTargetException e) {
                             e.printStackTrace();
                         }
-
-
                         currentBlock = BlockGenerator.getRandomShape();
+                        System.out.print(currentBlock.getClass());
                         repaint();
                     }
                     // System.out.println(Arrays.deepToString(landedBlocks));
@@ -223,9 +223,9 @@ public class BlockWorld extends JPanel {
                 System.out.println(blockShape[y][x]);
                 if (blockShape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect((currentBlock.getX()-currentBlock.getCenterX() + x) * factor, (currentBlock.getY() - currentBlock.getCenterY() + y) * factor,  factor, factor);
+                    g2d.fillRect((currentBlock.getX()/*-currentBlock.getCenterX() */+ x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor,  factor, factor);
                     g2d.setColor(Color.LIGHT_GRAY);
-                    g2d.drawRect((currentBlock.getX() -currentBlock.getCenterX() + x) * factor, (currentBlock.getY() - currentBlock.getCenterY() + y) * factor, factor,  factor);
+                    g2d.drawRect((currentBlock.getX() /*-currentBlock.getCenterX()*/ + x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor, factor, factor);
 
                 }
             }
