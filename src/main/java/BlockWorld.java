@@ -141,7 +141,7 @@ public class BlockWorld extends JPanel {
         Thread gameThread = new Thread() {
             public void run() {
                 List<int[][]> shape = BlockGenerator.getRandomShape();
-                currentBlock = new Rectangle(4, 0, shape, 0);
+                currentBlock = new Rectangle(4, 0, 1, 1, shape, 0);
 
                 while (true) {
                     boolean isFalling = update();
@@ -164,12 +164,12 @@ public class BlockWorld extends JPanel {
 
 
                         shape = BlockGenerator.getRandomShape();
-                        currentBlock = new Rectangle(4, 0, shape, 0);
+                        currentBlock = new Rectangle(4, 0, 1,1, shape, 0);
                         repaint();
                     }
                     // System.out.println(Arrays.deepToString(landedBlocks));
                     try {
-                        Thread.sleep(2 * 1000);
+                        Thread.sleep(speed * 1000);
                     } catch (InterruptedException ex) {
                     }
                 }
@@ -224,9 +224,9 @@ public class BlockWorld extends JPanel {
                 System.out.println(blockShape[y][x]);
                 if (blockShape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor,  factor, factor);
+                    g2d.fillRect((currentBlock.getX()-currentBlock.getCenterX() + x) * factor, (currentBlock.getY() - currentBlock.getCenterY() + y) * factor,  factor, factor);
                     g2d.setColor(Color.LIGHT_GRAY);
-                    g2d.drawRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, factor,  factor);
+                    g2d.drawRect((currentBlock.getX() -currentBlock.getCenterX() + x) * factor, (currentBlock.getY() - currentBlock.getCenterY() + y) * factor, factor,  factor);
 
                 }
             }

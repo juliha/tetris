@@ -5,8 +5,8 @@ import java.util.List;
  */
 public class Rectangle extends AbstractBlock {
 
-  public Rectangle(int x,  int y, List<int[][]> shape, int orientation) {
-      super(x,y, shape, orientation);
+  public Rectangle(int x,  int y, int centerX, int centerY, List<int[][]> shape, int orientation) {
+      super(x,y, centerX, centerY, shape, orientation);
   }
 
 }

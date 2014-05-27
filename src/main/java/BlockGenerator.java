@@ -39,7 +39,7 @@ public class BlockGenerator {
     public static final int[][] zShape10 = {{1,1,0},{0 ,1, 1}};
     public static final int[][] zShape11 = {{0,1}, {1,1},{1 ,0}};
     public static final int[][] zShape12 = {{1,1,0},{0 ,1, 1}};
-    public static final int[][] zShape13 = {{1,1,0},{0 ,1, 1}};
+    public static final int[][] zShape13 = {{0,1}, {1,1} ,{1, 0}};
     public static final List<int[][]> zShape1 = ImmutableList.of(zShape10, zShape11, zShape12, zShape13);
 
     public static final int[][] zShape20 = {{0,1,1},{1 ,1, 0}};
