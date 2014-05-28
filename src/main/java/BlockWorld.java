@@ -84,8 +84,9 @@ public class BlockWorld extends JPanel {
         speed = 1;
     }
 
-    private int removeFull(int i) {
+    private int removeFull() {
         System.out.println("in remove Full");
+        int i=0;
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
             int c = 0;
@@ -96,7 +97,7 @@ public class BlockWorld extends JPanel {
             }
             if (c == max) {
                 removeRow(i);
-                removeFull(i);
+                ///removeFull(i);
             }
             i++;
         }
@@ -154,7 +155,7 @@ public class BlockWorld extends JPanel {
                             SwingUtilities.invokeAndWait(new Runnable() {
                                 @Override
                                 public void run() {
-                                    removeFull(0);
+                                    removeFull();
                                 }
                             });
                         } catch (InterruptedException e) {
@@ -162,7 +163,7 @@ public class BlockWorld extends JPanel {
                         } catch (InvocationTargetException e) {
                             e.printStackTrace();
                         }
-                        currentBlock = BlockGenerator.getRandomShape();
+                        currentBlock = BlockGenerator.getRandomShape().copyBlock();
                         System.out.print(currentBlock.getClass());
                         repaint();
                     }
@@ -202,32 +203,37 @@ public class BlockWorld extends JPanel {
         super.paintComponent(graphics);
 
         Graphics2D g2d = (Graphics2D) graphics;
-        for (int y = 0; y < landedBlocks.length; y++) {
-            for (int x = 0; x < landedBlocks[y].length; x++) {
-                g2d.setColor(Color.lightGray);
-                g2d.drawRect(x * factor, y * factor, factor, factor);
-                if (landedBlocks[y][x] == 1) {
-                    g2d.setColor(Color.BLUE);
-                    g2d.fillRect(x * factor, y * factor, factor, factor);
-                    g2d.setColor(Color.lightGray);
-                    g2d.drawRect(x * factor, y * factor, factor, factor);
-                }
 
-            }
-        }
 
 
         for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
             for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
                 int[][] blockShape = currentBlock.getBlockShape();
-                System.out.println(blockShape[y][x]);
                 if (blockShape[y][x] == 1) {
-                    g2d.setColor(Color.BLUE);
-                    g2d.fillRect((currentBlock.getX()/*-currentBlock.getCenterX() */+ x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor,  factor, factor);
+                    g2d.setColor(Color.YELLOW);
+                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, factor, factor);
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawString("1", (currentBlock.getX()+x)*factor +(factor/2), (currentBlock.getY()+y)*factor +(factor/2));
                     g2d.setColor(Color.LIGHT_GRAY);
                     g2d.drawRect((currentBlock.getX() /*-currentBlock.getCenterX()*/ + x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor, factor, factor);
 
                 }
+            }
+        }
+
+        for (int y = 0; y < landedBlocks.length; y++) {
+            for (int x = 0; x < landedBlocks[y].length; x++) {
+                g2d.setColor(Color.lightGray);
+                g2d.drawRect(x * factor, y * factor, factor, factor);
+                if (landedBlocks[y][x] == 1) {
+                    g2d.setColor(Color.YELLOW);
+                    g2d.fillRect(x * factor, y * factor, factor, factor);
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawString("1*", x *factor +  (factor/2), y*factor +(factor/2));
+                    g2d.setColor(Color.lightGray);
+                    g2d.drawRect(x * factor, y * factor, factor, factor);
+                }
+
             }
         }
     }
