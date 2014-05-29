@@ -30,8 +30,7 @@ public class BlockWorldModel {
         return landedBlocks;
     }
 
-    public int removeFull() {
-        System.out.println("in remove Full");
+    public void removeFull() {
         int i=0;
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
@@ -46,7 +45,6 @@ public class BlockWorldModel {
             }
             i++;
         }
-        return i;
     }
 
     private void removeRow(int i) {

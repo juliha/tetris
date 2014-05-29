@@ -14,8 +14,8 @@ import java.util.Timer;
  */
 public class BlockWorld extends JPanel {
 
-    private int factor ;
-    private int width ;
+    private int factor;
+    private int width;
     private int height;
     Color border = Color.LIGHT_GRAY;
     private int speed;
@@ -26,10 +26,10 @@ public class BlockWorld extends JPanel {
     BlockWorld(int width, int height, int factor) {
         super();
         this.factor = factor;
-        this.width= width;
+        this.width = width;
         this.height = height;
         timer = new Timer();
-        this.setPreferredSize(new Dimension(width*factor, height*factor));
+        this.setPreferredSize(new Dimension(width * factor, height * factor));
         this.setFocusable(true);
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
         model = new BlockWorldModel(width, height);
@@ -88,24 +88,38 @@ public class BlockWorld extends JPanel {
 
                 while (true) {
                     boolean isFalling = model.update();
-                    repaint();
-                    if (isFalling == false) {
-                        model.landBlock();
-                           try {
-                            SwingUtilities.invokeAndWait(new Runnable() {
-                                @Override
-                                public void run() {
-                                    model.removeFull();
-                                }
-                            });
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        } catch (InvocationTargetException e) {
-                            e.printStackTrace();
-                        }
-                        model.setNewCurrentBlock();
-                        repaint();
+                    System.out.println("is Falling " + isFalling);
+                    try {
+                        SwingUtilities.invokeAndWait(new Runnable() {
+                            @Override
+                            public void run() {
+                                repaint();
+                            }
+                        });
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
                     }
+                   if (isFalling == false) {
+                        model.landBlock();
+                        model.removeFull();
+                       try {
+                           SwingUtilities.invokeAndWait( new Runnable() {
+                               @Override
+                               public void run() {
+                                   model.setNewCurrentBlock();
+                               }
+                           });
+                       } catch (InterruptedException e) {
+                           e.printStackTrace();
+                       } catch (InvocationTargetException e) {
+                           e.printStackTrace();
+                       }
+
+                       System.out.println(Arrays.deepToString(model.getCurrentBlock().getBlockShape()));
+                        System.out.println(" x, y "+model.getCurrentBlock().getX() +", "+model.getCurrentBlock().getY());
+                   }
                     try {
                         Thread.sleep(speed * 1000);
                     } catch (InterruptedException ex) {
@@ -124,7 +138,7 @@ public class BlockWorld extends JPanel {
 
 
         AbstractBlock block = model.getCurrentBlock();
-        int[][] blockShape =block.getBlockShape();
+        int[][] blockShape = block.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
                 if (blockShape[y][x] == 1) {
@@ -133,7 +147,7 @@ public class BlockWorld extends JPanel {
                     g2d.setColor(Color.BLACK);
                     g2d.drawString("1", (block.getX() + x) * factor + (factor / 2), (block.getY() + y) * factor + (factor / 2));
                     g2d.setColor(Color.LIGHT_GRAY);
-                    g2d.drawRect((block.getX()  + x) * factor, (block.getY()  + y) * factor, factor, factor);
+                    g2d.drawRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
 
                 }
             }
@@ -147,7 +161,7 @@ public class BlockWorld extends JPanel {
                     g2d.setColor(Color.YELLOW);
                     g2d.fillRect(x * factor, y * factor, factor, factor);
                     g2d.setColor(Color.BLACK);
-                    g2d.drawString("1*", x *factor +  (factor/2), y*factor +(factor/2));
+                    g2d.drawString("1*", x * factor + (factor / 2), y * factor + (factor / 2));
                     g2d.setColor(Color.lightGray);
                     g2d.drawRect(x * factor, y * factor, factor, factor);
                 }
@@ -169,7 +183,7 @@ public class BlockWorld extends JPanel {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BlockWorld game = new BlockWorld(10,17,20);
+                BlockWorld game = new BlockWorld(10, 17, 20);
                 game.createAndShowGUI();
             }
         });

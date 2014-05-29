@@ -49,14 +49,21 @@ public class BlockGenerator {
 
     public static final List<int[][]> zShape2 = ImmutableList.of(zShape20, zShape21, zShape22, zShape23);
 
-//    public static final List<List<int[][]>> possibleShapes =ImmutableList.of(quad, rect,lShape1 , lShape2, tShape, zShape1, zShape2);
     public static final List<AbstractBlock> possibleShapes =ImmutableList.of(new LShape(4,0),  new TShape(4,0), new Rectangle(4,0));
 
     public static AbstractBlock getRandomShape() {
-        System.out.println("generating new shape");
-        double high = possibleShapes.size();
+        double high = 2;
         int i = (int) (Math.random() * (high));
-        return possibleShapes.get(i);
+        switch(i) {
+            case 0 :
+                return new LShape(4,0);
+            case 1 :
+                return  new TShape(4,0);
+            case 2 :
+                return new Rectangle(4,0);
+            default:
+                return new LShape(4,0);
+        }
     }
 
 }
