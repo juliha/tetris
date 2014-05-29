@@ -1,3 +1,4 @@
+import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -20,6 +21,7 @@ public class BlockWorld extends JPanel {
     Color border = Color.LIGHT_GRAY;
     private int speed;
     java.util.Timer timer;
+
 
     BlockWorldModel model;
 
@@ -110,11 +112,17 @@ public class BlockWorld extends JPanel {
                     }
                 }
                 if (canContinue == false) {
-                    System.out.println("GAME OVER");
+                    gameOver();
                 }
             }
         };
+
         gameThread.start();  // Invoke GaemThread.run()
+    }
+
+    public void gameOver() {
+        JOptionPane.showMessageDialog(this, "Game Over", "Game Over", JOptionPane.YES_NO_OPTION);
+
     }
 
     @Override
