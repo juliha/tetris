@@ -63,13 +63,12 @@ abstract class AbstractBlock {
     }
 
     public void rotate() {
-        int[][] newShape = new int[blockShape[0].length][blockShape.length];
-        final int M = blockShape.length;
-        final int N = blockShape[0].length;
-        int[][] ret = new int[N][M];
-        for (int r = 0; r < M; r++) {
-            for (int c = 0; c < N; c++) {
-                newShape[c][M-1-r] = blockShape[r][c];
+        final int oldY = blockShape.length;
+        final int oldX = blockShape[0].length;
+        int[][] newShape = new int[oldX][oldY];
+        for (int y = 0; y < oldY; y++) {
+            for (int x = 0; x < oldX; x++) {
+                newShape[x][oldY-1-y] = blockShape[y][x];
             }
         }
         this.blockShape = newShape;
