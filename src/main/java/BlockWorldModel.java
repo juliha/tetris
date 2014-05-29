@@ -18,8 +18,15 @@ public class BlockWorldModel {
         }
     }
 
-    public void setNewCurrentBlock() {
-        currentBlock = BlockGenerator.getRandomShape();
+    public boolean setNewCurrentBlock() {
+        AbstractBlock block = BlockGenerator.getRandomShape();
+        if (moveIsPossible(block)) {
+            currentBlock = block;
+            return true;
+        }
+        //this signals that the game is over
+         return false;
+
     }
 
     public AbstractBlock getCurrentBlock() {

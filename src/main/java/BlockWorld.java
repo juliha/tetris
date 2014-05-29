@@ -83,10 +83,9 @@ public class BlockWorld extends JPanel {
 
     public void runGame() {
         Thread gameThread = new Thread() {
+            boolean canContinue = model.setNewCurrentBlock();
             public void run() {
-                model.setNewCurrentBlock();
-
-                while (true) {
+                while (canContinue) {
                     boolean isFalling = model.update();
                     try {
                         SwingUtilities.invokeAndWait(new Runnable() {
@@ -103,12 +102,15 @@ public class BlockWorld extends JPanel {
                     if (isFalling == false) {
                         model.landBlock();
                         model.removeFull();
-                        model.setNewCurrentBlock();
+                        canContinue = model.setNewCurrentBlock();
                     }
                     try {
                         Thread.sleep(speed * 1000);
                     } catch (InterruptedException ex) {
                     }
+                }
+                if (canContinue == false) {
+                    System.out.println("GAME OVER");
                 }
             }
         };
