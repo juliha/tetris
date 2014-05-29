@@ -21,6 +21,7 @@ public class BlockWorld extends JPanel {
     private int speed;
 
 
+
     BlockWorldModel model;
 
     BlockWorld(int width, int height, int factor) {
@@ -108,16 +109,14 @@ public class BlockWorld extends JPanel {
                     } catch (InterruptedException ex) {
                     }
                 }
-                if (canContinue == false) {
-                    gameOver();
-                }
+                gameOver();
             }
         };
 
         gameThread.start();  // Invoke GaemThread.run()
     }
 
-    public void gameOver() {
+    public int gameOver() {
         Object[] options = {"Restart",
                 "Quit"};
         int n = JOptionPane.showOptionDialog(this,
@@ -128,6 +127,7 @@ public class BlockWorld extends JPanel {
                 null,     //do not use a custom Icon
                 options,  //the titles of buttons
                 options[0]); //default button title
+        return n;
 
     }
 
@@ -170,6 +170,7 @@ public class BlockWorld extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
         runGame();
+
         frame.pack();
         frame.setVisible(true);
     }
