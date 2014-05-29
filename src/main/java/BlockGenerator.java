@@ -49,7 +49,6 @@ public class BlockGenerator {
 
     public static final List<int[][]> zShape2 = ImmutableList.of(zShape20, zShape21, zShape22, zShape23);
 
-    public static final List<AbstractBlock> possibleShapes =ImmutableList.of(new LShape(4,0),  new TShape(4,0), new Rectangle(4,0));
 
     public static AbstractBlock getRandomShape() {
         double high = 2;

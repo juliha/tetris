@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,9 +10,11 @@ public class Rectangle extends AbstractBlock {
 
     public Rectangle(int x, int y, int[][] shape ) {
         super(x, y,  shape);
+        color = Color.MAGENTA;
     }
     public Rectangle(int x, int y) {
         this(x, y,  new int[][] {{0,0,0,0},{1,1,1,1},{0,0,0,0},{0,0,0,0}});
+        color = Color.MAGENTA;
     }
 
     @Override

@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ abstract class AbstractBlock {
     protected int x;
     protected int y;
     protected int[][] blockShape;
+    Color color =  Color.BLACK;
 
     protected AbstractBlock(int x, int y,  int[][] shape) {
         this.x = x;
@@ -22,6 +24,9 @@ abstract class AbstractBlock {
 
     public abstract AbstractBlock copyBlock() ;
 
+    public Color getColor() {
+        return color;
+    }
 
     public int getX() {
         return x;

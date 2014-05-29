@@ -101,25 +101,13 @@ public class BlockWorld extends JPanel {
                     } catch (InvocationTargetException e) {
                         e.printStackTrace();
                     }
-                   if (isFalling == false) {
+                    if (isFalling == false) {
                         model.landBlock();
                         model.removeFull();
-                       try {
-                           SwingUtilities.invokeAndWait( new Runnable() {
-                               @Override
-                               public void run() {
-                                   model.setNewCurrentBlock();
-                               }
-                           });
-                       } catch (InterruptedException e) {
-                           e.printStackTrace();
-                       } catch (InvocationTargetException e) {
-                           e.printStackTrace();
-                       }
-
-                       System.out.println(Arrays.deepToString(model.getCurrentBlock().getBlockShape()));
-                        System.out.println(" x, y "+model.getCurrentBlock().getX() +", "+model.getCurrentBlock().getY());
-                   }
+                        model.setNewCurrentBlock();
+                        System.out.println(Arrays.deepToString(model.getCurrentBlock().getBlockShape()));
+                        System.out.println(" x, y " + model.getCurrentBlock().getX() + ", " + model.getCurrentBlock().getY());
+                    }
                     try {
                         Thread.sleep(speed * 1000);
                     } catch (InterruptedException ex) {
@@ -142,7 +130,7 @@ public class BlockWorld extends JPanel {
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
                 if (blockShape[y][x] == 1) {
-                    g2d.setColor(Color.YELLOW);
+                    g2d.setColor(block.getColor());
                     g2d.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
                     g2d.setColor(Color.BLACK);
                     g2d.drawString("1", (block.getX() + x) * factor + (factor / 2), (block.getY() + y) * factor + (factor / 2));
@@ -158,7 +146,7 @@ public class BlockWorld extends JPanel {
                 g2d.setColor(Color.lightGray);
                 g2d.drawRect(x * factor, y * factor, factor, factor);
                 if (landedBlocks[y][x] == 1) {
-                    g2d.setColor(Color.YELLOW);
+                    g2d.setColor(Color.DARK_GRAY);
                     g2d.fillRect(x * factor, y * factor, factor, factor);
                     g2d.setColor(Color.BLACK);
                     g2d.drawString("1*", x * factor + (factor / 2), y * factor + (factor / 2));
