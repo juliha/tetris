@@ -8,29 +8,8 @@ import java.util.List;
  */
 public class BlockGenerator {
 
-
-
-
-    public static final int[][] lShape20 = {{0,0,1},{1 ,1, 1}};
-    public static final int[][] lShape21 = {{1,0}, {1,0}, {1,1}};
-    public static final int[][] lShape22 = {{1,1,1},{1 ,0, 0}};
-    public static final int[][] lShape23 = {{1,1},{0 ,1}, {0, 1}};
-    public static final List<int[][]> lShape2 = ImmutableList.of(lShape20, lShape21, lShape22, lShape23);
-
-
-
-
-
-    public static final int[][] zShape20 = {{0,1,1},{1 ,1, 0}};
-    public static final int[][] zShape21 = {{0,1}, {1,1} ,{1, 0}};
-    public static final int[][] zShape22 = {{0,1,1},{1 ,1, 0}};
-    public static final int[][] zShape23 = {{0,1}, {1,1} ,{0, 1}};
-
-    public static final List<int[][]> zShape2 = ImmutableList.of(zShape20, zShape21, zShape22, zShape23);
-
-
     public static AbstractBlock getRandomShape() {
-        double high = 4;
+        double high = 6;
         int i = (int) (Math.random() * (high));
         switch(i) {
             case 0 :
@@ -43,6 +22,10 @@ public class BlockGenerator {
                 return new SShape(4, 0);
             case 4:
                 return new Quad(4, 0);
+            case 5 :
+                return new LShape2(4, 0);
+            case 6 :
+                return new SShape2(4,0);
             default:
                 return new LShape(4,0);
         }

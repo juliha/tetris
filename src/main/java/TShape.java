@@ -8,14 +8,14 @@ public class TShape extends AbstractBlock {
 
     public TShape(int x, int y, int[][] shape) {
         super(x, y, shape);
-        color = Color.cyan;
+        color = Color.RED;
     }
     public TShape(int x, int y) {
         super(x, y, new int[][]{
                 {0, 1, 0},
                 {1, 1, 1},
                 {0, 0, 0}});
-        color = Color.cyan;
+        color = Color.red;
     }
     @Override
     public AbstractBlock copyBlock() {
