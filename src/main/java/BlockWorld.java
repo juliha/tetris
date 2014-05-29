@@ -1,4 +1,3 @@
-import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -7,7 +6,7 @@ import java.awt.geom.Rectangle2D;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
+
 
 
 /**
@@ -20,7 +19,6 @@ public class BlockWorld extends JPanel {
     private int height;
     Color border = Color.LIGHT_GRAY;
     private int speed;
-    java.util.Timer timer;
 
 
     BlockWorldModel model;
@@ -30,7 +28,6 @@ public class BlockWorld extends JPanel {
         this.factor = factor;
         this.width = width;
         this.height = height;
-        timer = new Timer();
         this.setPreferredSize(new Dimension(width * factor, height * factor));
         this.setFocusable(true);
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
@@ -121,7 +118,16 @@ public class BlockWorld extends JPanel {
     }
 
     public void gameOver() {
-        JOptionPane.showMessageDialog(this, "Game Over", "Game Over", JOptionPane.YES_NO_OPTION);
+        Object[] options = {"Restart",
+                "Quit"};
+        int n = JOptionPane.showOptionDialog(this,
+                "You Loose",
+                "gameOver",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,     //do not use a custom Icon
+                options,  //the titles of buttons
+                options[0]); //default button title
 
     }
 
