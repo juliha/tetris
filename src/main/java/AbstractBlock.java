@@ -11,34 +11,20 @@ abstract class AbstractBlock {
 
     protected int x;
     protected int y;
-    protected int centerX;
-    protected int centerY;
-    int orientation;
     protected int[][] blockShape;
 
-    protected AbstractBlock(int x, int y,  int centerX, int centerY, int[][] shape, int orientation) {
+    protected AbstractBlock(int x, int y,  int[][] shape) {
         this.x = x;
         this.y = y;
         this.blockShape =shape;
-        this.orientation = orientation;
+
     }
 
     public abstract AbstractBlock copyBlock() ;
 
-    public int getCenterX() {
-        return centerX;
-    }
-
-    public int getCenterY() {
-        return centerY;
-    }
-
-    public int getOrientation() {
-        return orientation;
-    }
 
     public int getX() {
-        return x-getCenterX();
+        return x;
     }
 
     public void setX(int x) {
@@ -46,7 +32,7 @@ abstract class AbstractBlock {
     }
 
     public int getY() {
-        return y-getCenterY();
+        return y;
     }
 
     public void setY(int y) {
@@ -71,7 +57,18 @@ abstract class AbstractBlock {
         this.y++;
     }
 
-    public abstract void rotate();
+    public void rotate() {
+        int[][] newShape = new int[blockShape[0].length][blockShape.length];
+        final int M = blockShape.length;
+        final int N = blockShape[0].length;
+        int[][] ret = new int[N][M];
+        for (int r = 0; r < M; r++) {
+            for (int c = 0; c < N; c++) {
+                newShape[c][M-1-r] = blockShape[r][c];
+            }
+        }
+        this.blockShape = newShape;
+    }
 
 
 

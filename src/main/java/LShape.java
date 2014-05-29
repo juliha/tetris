@@ -1,18 +1,20 @@
 /**
  * Created by julia on 27.05.2014.
  */
-public class LShape extends ThreeOnTwoBlock {
+public class LShape extends AbstractBlock {
 
-    public LShape(int x, int y, int centerX, int centerY, int[][] shape, int orientation) {
-        super(x, y, centerX, centerY, shape, orientation);
+    public LShape(int x, int y, int[][] shape) {
+        super(x, y,  shape);
     }
 
-    public LShape(int x, int y, int orientation) {
-        this(x, y, 1, 1, new int[][]{{1, 0, 0}, {1, 1, 1}}, orientation);
+    public LShape(int x, int y) {
+        super(x, y,  new int[][]{{1, 0, 0}, {1, 1, 1,}, {0,0,0}});
     }
+
+
 
     @Override
     public AbstractBlock copyBlock() {
-        return new LShape(this.getX(), this.getY(), this.getCenterX(), this.getCenterY(), this.blockShape, this.orientation);
+        return new LShape(this.getX(), this.getY(),  this.blockShape);
     }
 }

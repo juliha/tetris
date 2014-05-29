@@ -10,8 +10,7 @@ import java.util.Arrays;
 public class RotationDemo extends JComponent {
     
     private int[][] shape;
-    private int centerX;
-    private int centerY;
+
     private int x;
     private int y;
     int orientation=0;
@@ -23,13 +22,12 @@ public class RotationDemo extends JComponent {
         this.setFocusable(true);
         //shape = new int[][]{{1, 0, 0}, {1, 1, 1}};
        // shape = new int[][]{{0, 0, 1}, {1, 1, 1}};
-        //shape = new int[][]{{0, 1, 0}, {1, 1, 1}};
-//        shape = new int[][]{{0, 1, 1}, {1, 1, 0}};
-        shape = new int[][]{{1, 1, 1,1}};
-        centerX=2;
-        centerY=0;
-        x=5;
-        y=5;
+        shape = new int[][]{{0, 1, 0}, {1, 1, 1},{0, 0, 0}};
+//        shape = new int[][]{{1, 0, 0}, {1, 1, 1,}, {0,0,0}};
+//        shape = new int[][]{{0,0,0,0},{1, 1, 1,1}, {0,0,0,0},{0,0,0,0} };
+
+        x=4;
+        y=4;
 
         this.addKeyListener(new KeyListener() {
             @Override
@@ -74,9 +72,9 @@ public class RotationDemo extends JComponent {
             for (int x = 0; x < shape[y].length; x++) {
                 if (shape[y][x] == 1) {
                     g2d.setColor(Color.BLUE);
-                    g2d.fillRect( (this.x-centerX+ x) * factor, (this.y-centerY +y) * factor,  factor, factor);
+                    g2d.fillRect( (this.x+ x) * factor, (this.y +y) * factor,  factor, factor);
                     g2d.setColor(Color.lightGray);
-                    g2d.drawRect((this.x - centerX + x) * factor, (this.y - centerY + y) * factor, factor, factor);
+                    g2d.drawRect((this.x  + x) * factor, (this.y  + y) * factor, factor, factor);
 
                 }
             }
@@ -106,28 +104,41 @@ public class RotationDemo extends JComponent {
             }
         }
         orientation++;
-        switch (orientation) {
-            case 1 :
-               centerX -=2;
-                centerY +=2;
-                break;
-            case 2 :
-               centerY-=2;
-                centerX+=2;
-               break;
-            case 3 :
-                centerX -= 2;
-                centerY +=2;
-                break;
-            case 4 :
-                orientation =0;
-                centerX +=2;
-                centerY -=2;
-                break;
-        }
+        int height = shape.length;
+        int width = shape[0].length;
+
+        int centerX = width/2;
+        int centerY = height/2;
+
+//        x = y+centerX-centerY;
+//        y = centerX + centerY -x - width;
+
+//        switch (orientation) {
+//            case 1 :
+//               x -=2;
+//                y +=2;
+//                break;
+//            case 2 :
+//               y-=2;
+//                x+=2;
+//               break;
+//            case 3 :
+//                x -= 2;
+//                y +=2;
+//                break;
+//            case 4 :
+//                orientation =0;
+//                x +=2;
+//                y -=2;
+//                break;
+//        }
+        double angle = Math.toRadians(90);
+//        int x1 =  (int) (Math.cos(angle)* (x-centerX) - Math.sin(angle) *(y-centerY) +centerX);
+//        int y1 =(int) (Math.sin(angle)* (x-centerX) + Math.cos(angle) *(y-centerY) +centerY);
 
         System.out.println(Arrays.deepToString(newShape));
         shape = newShape;
+
 
 
     }

@@ -1,17 +1,17 @@
 /**
  * Created by julia on 27.05.2014.
  */
-public class TShape extends ThreeOnTwoBlock {
-    public TShape(int x, int y, int centerX, int centerY, int[][] shape, int orientation) {
-        super(x, y, centerX, centerY, shape, orientation);
-    }
+public class TShape extends AbstractBlock {
 
-    public TShape(int x, int y, int orientation) {
-        super(x, y, 1,1, new int[][] {{0,1,0},{1,1,1}}, orientation);
-    }
 
+    public TShape(int x, int y, int[][] shape) {
+        super(x, y, shape);
+    }
+    public TShape(int x, int y) {
+        super(x, y, new int[][]{{0, 1, 0}, {1, 1, 1},{0, 0, 0}});
+    }
     @Override
     public AbstractBlock copyBlock() {
-        return new TShape(this.getX(),this.getY(), this.getCenterX(), this.getCenterY(), this.blockShape, this.orientation);
+        return new TShape(this.getX(),this.getY(), this.blockShape);
     }
 }

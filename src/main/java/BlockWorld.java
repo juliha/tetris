@@ -23,6 +23,8 @@ public class BlockWorld extends JPanel {
     private AbstractBlock currentBlock;
     private int[][] landedBlocks;
 
+    BlockWorldModel model;
+
     BlockWorld() {
         super();
 
@@ -30,13 +32,8 @@ public class BlockWorld extends JPanel {
         this.setPreferredSize(new Dimension(width, height));
         this.setFocusable(true);
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
+        model = new BlockWorldModel(width, height);
 
-        landedBlocks = new int[16][10];
-        for (int i = 0; i < landedBlocks.length; i++) {
-            for (int j = 0; j < landedBlocks[i].length; j++) {
-                landedBlocks[i][j] = 0;
-            }
-        }
 
         this.addKeyListener(new KeyListener() {
             @Override
@@ -50,25 +47,25 @@ public class BlockWorld extends JPanel {
                 switch (code) {
                     case KeyEvent.VK_RIGHT:
                         block.moveRight();
-                        if (moveIsPossible(block)) {
+                        if (model.moveIsPossible(block)) {
                             currentBlock.moveRight();
                         }
                         break;
                     case KeyEvent.VK_LEFT:
                         block.moveLeft();
-                        if (moveIsPossible(block)) {
+                        if (model.moveIsPossible(block)) {
                             currentBlock.moveLeft();
                         }
                         break;
                     case KeyEvent.VK_UP:
                         block.rotate();
-                        if (moveIsPossible(block)) {
+                        if (model.moveIsPossible(block)) {
                             currentBlock.rotate();
                         }
                         break;
                     case KeyEvent.VK_DOWN:
                         block.moveDown();
-                        if (moveIsPossible(block)) {
+                        if (model.moveIsPossible(block)) {
                             currentBlock.moveDown();
                         }
                         break;
@@ -84,78 +81,22 @@ public class BlockWorld extends JPanel {
         speed = 1;
     }
 
-    private int removeFull() {
-        System.out.println("in remove Full");
-        int i=0;
-        while (i < landedBlocks.length) {
-            int max = landedBlocks[i].length;
-            int c = 0;
-            for (int j = 0; j < max; j++) {
-                if (landedBlocks[i][j] == 1) {
-                    c++;
-                }
-            }
-            if (c == max) {
-                removeRow(i);
-                ///removeFull(i);
-            }
-            i++;
-        }
-        return i;
-    }
-
-    private void removeRow(int i) {
-        int[][] newLandedBlocks = new int[landedBlocks.length][landedBlocks[0].length];
-        for (int j = 0; j < newLandedBlocks.length ; j++) {
-            if (j < i) {
-                newLandedBlocks[j + 1] = landedBlocks[j];
-            }
-            if (j > i) {
-                newLandedBlocks[j] =landedBlocks[j];
-            }
-        }
-        landedBlocks = newLandedBlocks;
-    }
-
-    private boolean moveIsPossible(AbstractBlock block) {
-        int[][] blockShape = block.getBlockShape();
-        for (int y = 0; y < blockShape.length; y++) {
-            for (int x = 0; x < blockShape[y].length; x++) {
-                int realX = x + block.getX();
-                int realY = y + block.getY();
-                if (!isWithingBoundsY(realY) || !isWithingBoundsX(realX) || (blockShape[y][x] == 1 && landedBlocks[realY][realX] == 1)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean isWithingBoundsX(int n) {
-        return n > -1 && n < landedBlocks[0].length;
-    }
-
-    private boolean isWithingBoundsY(int n) {
-        return n > -1 && n < landedBlocks.length;
-    }
-
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
                 currentBlock = BlockGenerator.getRandomShape();
 
                 while (true) {
-                    boolean isFalling = update();
+                    boolean isFalling = model.update();
                     repaint();
-                    System.out.println("is falling " +isFalling);
                     if (isFalling == false) {
                         int[][] blockShape = currentBlock.getBlockShape();
-                        landBlock(blockShape);
+                        model.landBlock(blockShape);
                         try {
                             SwingUtilities.invokeAndWait(new Runnable() {
                                 @Override
                                 public void run() {
-                                    removeFull();
+                                    model.removeFull();
                                 }
                             });
                         } catch (InterruptedException e) {
@@ -178,26 +119,6 @@ public class BlockWorld extends JPanel {
         gameThread.start();  // Invoke GaemThread.run()
     }
 
-    private void landBlock(int[][] blockShape) {
-        for (int y = 0; y < blockShape.length; y++) {
-            for (int x = 0; x < blockShape[y].length; x++) {
-                if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
-                    landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] = blockShape[y][x];
-                }
-            }
-        }
-    }
-
-    public boolean update() {
-        AbstractBlock block = currentBlock.copyBlock();
-        block.moveDown();
-        if (!moveIsPossible(block)) {
-            return false;
-        }
-        currentBlock.moveDown();
-        return true;
-    }
-
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -213,7 +134,7 @@ public class BlockWorld extends JPanel {
                     g2d.setColor(Color.YELLOW);
                     g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, factor, factor);
                     g2d.setColor(Color.BLACK);
-                    g2d.drawString("1", (currentBlock.getX()+x)*factor +(factor/2), (currentBlock.getY()+y)*factor +(factor/2));
+                    g2d.drawString("1", (currentBlock.getX() + x) * factor + (factor / 2), (currentBlock.getY() + y) * factor + (factor / 2));
                     g2d.setColor(Color.LIGHT_GRAY);
                     g2d.drawRect((currentBlock.getX() /*-currentBlock.getCenterX()*/ + x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor, factor, factor);
 
