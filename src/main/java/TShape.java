@@ -11,7 +11,10 @@ public class TShape extends AbstractBlock {
         color = Color.cyan;
     }
     public TShape(int x, int y) {
-        super(x, y, new int[][]{{0, 1, 0}, {1, 1, 1},{0, 0, 0}});
+        super(x, y, new int[][]{
+                {0, 1, 0},
+                {1, 1, 1},
+                {0, 0, 0}});
         color = Color.cyan;
     }
     @Override

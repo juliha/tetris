@@ -11,7 +11,10 @@ public class LShape extends AbstractBlock {
     }
 
     public LShape(int x, int y) {
-        super(x, y,  new int[][]{{1, 0, 0}, {1, 1, 1,}, {0,0,0}});
+        super(x, y,  new int[][]{
+                {1, 0, 0},
+                {1, 1, 1,},
+                {0,0,0}});
         color = Color.BLUE;
     }
 
