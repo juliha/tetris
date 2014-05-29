@@ -14,22 +14,22 @@ import java.util.Timer;
  */
 public class BlockWorld extends JPanel {
 
-    private int factor = 20;
-    private int width = 10 * factor;
-    private int height = 17 * factor;
+    private int factor ;
+    private int width ;
+    private int height;
     Color border = Color.LIGHT_GRAY;
     private int speed;
     java.util.Timer timer;
-    private AbstractBlock currentBlock;
-    private int[][] landedBlocks;
 
     BlockWorldModel model;
 
-    BlockWorld() {
+    BlockWorld(int width, int height, int factor) {
         super();
-
+        this.factor = factor;
+        this.width= width;
+        this.height = height;
         timer = new Timer();
-        this.setPreferredSize(new Dimension(width, height));
+        this.setPreferredSize(new Dimension(width*factor, height*factor));
         this.setFocusable(true);
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
         model = new BlockWorldModel(width, height);
@@ -43,30 +43,30 @@ public class BlockWorld extends JPanel {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 int code = keyEvent.getKeyCode();
-                AbstractBlock block = currentBlock.copyBlock();
+                AbstractBlock block = model.getCurrentBlock().copyBlock();
                 switch (code) {
                     case KeyEvent.VK_RIGHT:
                         block.moveRight();
                         if (model.moveIsPossible(block)) {
-                            currentBlock.moveRight();
+                            model.getCurrentBlock().moveRight();
                         }
                         break;
                     case KeyEvent.VK_LEFT:
                         block.moveLeft();
                         if (model.moveIsPossible(block)) {
-                            currentBlock.moveLeft();
+                            model.getCurrentBlock().moveLeft();
                         }
                         break;
                     case KeyEvent.VK_UP:
                         block.rotate();
                         if (model.moveIsPossible(block)) {
-                            currentBlock.rotate();
+                            model.getCurrentBlock().rotate();
                         }
                         break;
                     case KeyEvent.VK_DOWN:
                         block.moveDown();
                         if (model.moveIsPossible(block)) {
-                            currentBlock.moveDown();
+                            model.getCurrentBlock().moveDown();
                         }
                         break;
                 }
@@ -84,15 +84,14 @@ public class BlockWorld extends JPanel {
     public void runGame() {
         Thread gameThread = new Thread() {
             public void run() {
-                currentBlock = BlockGenerator.getRandomShape();
+                model.setNewCurrentBlock();
 
                 while (true) {
                     boolean isFalling = model.update();
                     repaint();
                     if (isFalling == false) {
-                        int[][] blockShape = currentBlock.getBlockShape();
-                        model.landBlock(blockShape);
-                        try {
+                        model.landBlock();
+                           try {
                             SwingUtilities.invokeAndWait(new Runnable() {
                                 @Override
                                 public void run() {
@@ -104,11 +103,9 @@ public class BlockWorld extends JPanel {
                         } catch (InvocationTargetException e) {
                             e.printStackTrace();
                         }
-                        currentBlock = BlockGenerator.getRandomShape().copyBlock();
-                        System.out.print(currentBlock.getClass());
+                        model.setNewCurrentBlock();
                         repaint();
                     }
-                    // System.out.println(Arrays.deepToString(landedBlocks));
                     try {
                         Thread.sleep(speed * 1000);
                     } catch (InterruptedException ex) {
@@ -126,22 +123,22 @@ public class BlockWorld extends JPanel {
         Graphics2D g2d = (Graphics2D) graphics;
 
 
-
-        for (int y = 0; y < currentBlock.getBlockShape().length; y++) {
-            for (int x = 0; x < currentBlock.getBlockShape()[y].length; x++) {
-                int[][] blockShape = currentBlock.getBlockShape();
+        AbstractBlock block = model.getCurrentBlock();
+        int[][] blockShape =block.getBlockShape();
+        for (int y = 0; y < blockShape.length; y++) {
+            for (int x = 0; x < blockShape[y].length; x++) {
                 if (blockShape[y][x] == 1) {
                     g2d.setColor(Color.YELLOW);
-                    g2d.fillRect((currentBlock.getX() + x) * factor, (currentBlock.getY() + y) * factor, factor, factor);
+                    g2d.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
                     g2d.setColor(Color.BLACK);
-                    g2d.drawString("1", (currentBlock.getX() + x) * factor + (factor / 2), (currentBlock.getY() + y) * factor + (factor / 2));
+                    g2d.drawString("1", (block.getX() + x) * factor + (factor / 2), (block.getY() + y) * factor + (factor / 2));
                     g2d.setColor(Color.LIGHT_GRAY);
-                    g2d.drawRect((currentBlock.getX() /*-currentBlock.getCenterX()*/ + x) * factor, (currentBlock.getY() /*- currentBlock.getCenterY()*/ + y) * factor, factor, factor);
+                    g2d.drawRect((block.getX()  + x) * factor, (block.getY()  + y) * factor, factor, factor);
 
                 }
             }
         }
-
+        int[][] landedBlocks = model.getLandedBlocks();
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
                 g2d.setColor(Color.lightGray);
@@ -172,7 +169,7 @@ public class BlockWorld extends JPanel {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                BlockWorld game = new BlockWorld();
+                BlockWorld game = new BlockWorld(10,17,20);
                 game.createAndShowGUI();
             }
         });
