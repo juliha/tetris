@@ -88,7 +88,6 @@ public class BlockWorld extends JPanel {
 
                 while (true) {
                     boolean isFalling = model.update();
-                    System.out.println("is Falling " + isFalling);
                     try {
                         SwingUtilities.invokeAndWait(new Runnable() {
                             @Override
@@ -122,7 +121,6 @@ public class BlockWorld extends JPanel {
 
         Graphics2D g2d = (Graphics2D) graphics;
 
-
         AbstractBlock block = model.getCurrentBlock();
         int[][] blockShape = block.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
@@ -132,10 +130,10 @@ public class BlockWorld extends JPanel {
                     g2d.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
                     g2d.setColor(Color.LIGHT_GRAY);
                     g2d.drawRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
-
                 }
             }
         }
+
         int[][] landedBlocks = model.getLandedBlocks();
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
@@ -147,7 +145,6 @@ public class BlockWorld extends JPanel {
                     g2d.setColor(Color.lightGray);
                     g2d.drawRect(x * factor, y * factor, factor, factor);
                 }
-
             }
         }
     }
