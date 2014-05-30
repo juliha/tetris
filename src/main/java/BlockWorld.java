@@ -143,17 +143,15 @@ public class BlockWorld extends JPanel implements Runnable {
                 stopGame();
             }
         }
-
     }
-
 
 
     public int gameOver() {
         Object[] options = {"Restart",
                 "Quit"};
         int n = JOptionPane.showOptionDialog(this,
-                "You Loose",
-                "gameOver",
+                "Game Over",
+                "Game Over",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE,
                 null,     //do not use a custom Icon

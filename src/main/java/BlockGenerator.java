@@ -9,8 +9,9 @@ import java.util.List;
 public class BlockGenerator {
 
     public static AbstractBlock getRandomShape() {
-        double high = 6;
+        double high = 7;
         int i = (int) (Math.random() * (high));
+        System.out.println(i);
         switch(i) {
             case 0 :
                 return new LShape(4,0);
