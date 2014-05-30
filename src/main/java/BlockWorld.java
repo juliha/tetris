@@ -3,7 +3,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.util.Arrays;
 
 
 /**
@@ -71,7 +71,7 @@ public class BlockWorld extends JPanel implements Runnable {
                         }
                         break;
                 }
-                repaint();
+               repaint();
             }
 
             @Override
@@ -142,12 +142,15 @@ public class BlockWorld extends JPanel implements Runnable {
                 model.landBlock();
                 model.removeFull();
                 isRunning = model.setNewCurrentBlock();
+
             }
             if (isRunning == false) {
                 stopGame();
             }
         }
     }
+
+
 
 
     public int gameOver() {
@@ -165,10 +168,10 @@ public class BlockWorld extends JPanel implements Runnable {
 
     }
 
+
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-
         Graphics2D g2d = (Graphics2D) graphics;
 
         AbstractBlock block = model.getCurrentBlock();
@@ -186,7 +189,6 @@ public class BlockWorld extends JPanel implements Runnable {
             }
         }
 
-
         int[][] landedBlocks = model.getLandedBlocks();
         for (int y = 0; y < landedBlocks.length; y++) {
             for (int x = 0; x < landedBlocks[y].length; x++) {
@@ -201,6 +203,8 @@ public class BlockWorld extends JPanel implements Runnable {
             }
         }
     }
+
+
 
 
 

@@ -128,20 +128,21 @@ public class BlockWorldModel {
         }
     }
 
-    public boolean update() {
-        AbstractBlock block = currentBlock.copyBlock();
-        block.moveDown();
-        if (!moveIsPossible(block)) {
-            return false;
-        }
-        currentBlock.moveDown();
-        return true;
-    }
+
 
     private void notifyListeners() {
         for (Listener listener : listeners) {
             listener.update(score);
         }
+    }
+    public boolean update() {
+        AbstractBlock block = getCurrentBlock().copyBlock();
+        block.moveDown();
+        if (!moveIsPossible(block)) {
+            return false;
+        }
+        getCurrentBlock().moveDown();
+        return true;
     }
 
     public void register(Listener listener) {
