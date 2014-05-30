@@ -6,16 +6,30 @@ import java.util.Arrays;
 public class BlockWorldModel {
     private AbstractBlock currentBlock;
     private int[][] landedBlocks;
+    int width;
+    int height;
+
 
     public BlockWorldModel(int width, int height) {
+        this.height = height;
+        this.width =width;
+        initializeLandedBlocks(width, height);
+
+    }
+
+    public void initializeLandedBlocks(int width, int height) {
         landedBlocks =new int[height][width];
-        int val=0;
         for (int i = 0; i < landedBlocks.length; i++) {
             for (int j = 0; j < landedBlocks[i].length; j++) {
                 landedBlocks[i][j] =0;
             }
 
         }
+    }
+
+    public void cleanUpModel() {
+        currentBlock = null;
+        initializeLandedBlocks(width,height);
     }
 
     public boolean setNewCurrentBlock() {

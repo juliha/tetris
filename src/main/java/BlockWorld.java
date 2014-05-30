@@ -12,16 +12,17 @@ import java.util.List;
 /**
  * Created by julia on 21.04.14.
  */
-public class BlockWorld extends JPanel {
+public class BlockWorld extends JPanel implements Runnable {
 
     private int factor;
     private int width;
     private int height;
-    Color border = Color.LIGHT_GRAY;
+    Color color = Color.LIGHT_GRAY;
     private int speed;
 
-
-
+    private Thread animation;
+    private volatile boolean isRunning=false;
+    private volatile boolean gameOver =false;
     BlockWorldModel model;
 
     BlockWorld(int width, int height, int factor) {
@@ -81,40 +82,71 @@ public class BlockWorld extends JPanel {
         speed = 1;
     }
 
-    public void runGame() {
-        Thread gameThread = new Thread() {
-            boolean canContinue = model.setNewCurrentBlock();
-            public void run() {
-                while (canContinue) {
-                    boolean isFalling = model.update();
-                    try {
-                        SwingUtilities.invokeAndWait(new Runnable() {
-                            @Override
-                            public void run() {
-                                repaint();
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                    if (isFalling == false) {
-                        model.landBlock();
-                        model.removeFull();
-                        canContinue = model.setNewCurrentBlock();
-                    }
-                    try {
-                        Thread.sleep(speed * 1000);
-                    } catch (InterruptedException ex) {
-                    }
-                }
-                gameOver();
-            }
-        };
-
-        gameThread.start();  // Invoke GaemThread.run()
+    public void addNotify() {
+        super.addNotify();
+       startGame();
     }
+
+    private void startGame() {
+        if (animation == null || !isRunning) {
+            animation = new Thread(this);
+            animation.start();
+        }
+    }
+
+    public void stopGame() {
+        isRunning =false;
+        repaint();
+    }
+
+    @Override
+    public void run() {
+        isRunning =true;
+        while (isRunning) {
+            gameUpdate();
+            repaint();
+            try {
+                Thread.sleep(speed * 1000);
+            } catch (InterruptedException ex) {
+            }
+        }
+        if (!isRunning) {
+            int n = gameOver();
+            if (n == 0) {
+                cleanup();
+                startGame();
+            } else {
+                System.exit(0);
+            }
+        }
+    }
+
+    private void cleanup() {
+        model.cleanUpModel();
+        //repaint();
+    }
+
+
+    private void gameUpdate() {
+        if (!gameOver) {
+            if (model.getCurrentBlock() == null) {
+                boolean isRunning = model.setNewCurrentBlock();
+            }
+            boolean isFalling = model.update();
+
+            if (isFalling == false) {
+                model.landBlock();
+                model.removeFull();
+                isRunning = model.setNewCurrentBlock();
+            }
+            if (isRunning == false) {
+                stopGame();
+            }
+        }
+
+    }
+
+
 
     public int gameOver() {
         Object[] options = {"Restart",
@@ -138,17 +170,20 @@ public class BlockWorld extends JPanel {
         Graphics2D g2d = (Graphics2D) graphics;
 
         AbstractBlock block = model.getCurrentBlock();
-        int[][] blockShape = block.getBlockShape();
-        for (int y = 0; y < blockShape.length; y++) {
-            for (int x = 0; x < blockShape[y].length; x++) {
-                if (blockShape[y][x] == 1) {
-                    g2d.setColor(block.getColor());
-                    g2d.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
-                    g2d.setColor(Color.LIGHT_GRAY);
-                    g2d.drawRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
+        if (model.getCurrentBlock() != null) {
+            int[][] blockShape = block.getBlockShape();
+            for (int y = 0; y < blockShape.length; y++) {
+                for (int x = 0; x < blockShape[y].length; x++) {
+                    if (blockShape[y][x] == 1) {
+                        g2d.setColor(block.getColor());
+                        g2d.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
+                        g2d.setColor(Color.LIGHT_GRAY);
+                        g2d.drawRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
+                    }
                 }
             }
         }
+
 
         int[][] landedBlocks = model.getLandedBlocks();
         for (int y = 0; y < landedBlocks.length; y++) {
@@ -169,7 +204,7 @@ public class BlockWorld extends JPanel {
         JFrame frame = new JFrame("Bloxx");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
-        runGame();
+        //run();
 
         frame.pack();
         frame.setVisible(true);
@@ -184,4 +219,6 @@ public class BlockWorld extends JPanel {
             }
         });
     }
+
+
 }
