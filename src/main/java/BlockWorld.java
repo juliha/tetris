@@ -24,6 +24,7 @@ public class BlockWorld extends JPanel implements Runnable {
 
     BlockWorld(int width, int height, int factor) {
         super();
+        setBackground(Color.WHITE);
         this.factor = factor;
         this.width = width;
         this.height = height;
@@ -137,7 +138,6 @@ public class BlockWorld extends JPanel implements Runnable {
                 boolean isRunning = model.setNewCurrentBlock();
             }
             boolean isFalling = model.update();
-
             if (isFalling == false) {
                 model.landBlock();
                 model.removeFull();

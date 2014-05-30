@@ -140,7 +140,6 @@ public class BlockWorldModel {
 
     private void notifyListeners() {
         for (Listener listener : listeners) {
-            System.out.println("Listeners are notified");
             listener.update(score);
         }
     }
