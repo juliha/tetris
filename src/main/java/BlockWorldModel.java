@@ -71,6 +71,7 @@ public class BlockWorldModel {
             if (c == max) {
                 removeRow(i);
                 score += 5;
+                notifyListeners();
             }
             i++;
         }
@@ -139,7 +140,8 @@ public class BlockWorldModel {
 
     private void notifyListeners() {
         for (Listener listener : listeners) {
-            listener.update();
+            System.out.println("Listeners are notified");
+            listener.update(score);
         }
     }
 
@@ -152,7 +154,7 @@ public class BlockWorldModel {
     }
 
     interface Listener {
-        public void update();
+        public void update(int score);
     }
 
 

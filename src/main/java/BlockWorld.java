@@ -20,7 +20,7 @@ public class BlockWorld extends JPanel implements Runnable {
     private Thread animation;
     private volatile boolean isRunning=false;
     private volatile boolean gameOver =false;
-    BlockWorldModel model;
+    private BlockWorldModel model;
 
     BlockWorld(int width, int height, int factor) {
         super();
@@ -81,10 +81,15 @@ public class BlockWorld extends JPanel implements Runnable {
         speed = 1;
     }
 
+    public BlockWorldModel getModel() {
+        return model;
+    }
+
     public void addNotify() {
         super.addNotify();
        startGame();
     }
+
 
     private void startGame() {
         if (animation == null || !isRunning) {
