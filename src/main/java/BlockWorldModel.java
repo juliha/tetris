@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by julia on 29.05.2014.
@@ -9,21 +11,23 @@ public class BlockWorldModel {
     int width;
     int height;
     int score;
+    List<Listener> listeners;
 
 
     public BlockWorldModel(int width, int height) {
         this.height = height;
-        this.width =width;
-        score=0;
+        this.width = width;
+        score = 0;
         initializeLandedBlocks(width, height);
+        listeners = new ArrayList<Listener>();
 
     }
 
     public void initializeLandedBlocks(int width, int height) {
-        landedBlocks =new int[height][width];
+        landedBlocks = new int[height][width];
         for (int i = 0; i < landedBlocks.length; i++) {
             for (int j = 0; j < landedBlocks[i].length; j++) {
-                landedBlocks[i][j] =0;
+                landedBlocks[i][j] = 0;
             }
 
         }
@@ -31,8 +35,8 @@ public class BlockWorldModel {
 
     public void cleanUpModel() {
         currentBlock = null;
-        score=0;
-        initializeLandedBlocks(width,height);
+        score = 0;
+        initializeLandedBlocks(width, height);
     }
 
     public boolean setNewCurrentBlock() {
@@ -42,7 +46,7 @@ public class BlockWorldModel {
             return true;
         }
         //this signals that the game is over
-         return false;
+        return false;
 
     }
 
@@ -55,7 +59,7 @@ public class BlockWorldModel {
     }
 
     public void removeFull() {
-        int i=0;
+        int i = 0;
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
             int c = 0;
@@ -66,7 +70,7 @@ public class BlockWorldModel {
             }
             if (c == max) {
                 removeRow(i);
-                score +=5;
+                score += 5;
             }
             i++;
         }
@@ -74,12 +78,12 @@ public class BlockWorldModel {
 
     private void removeRow(int i) {
         int[][] newLandedBlocks = new int[landedBlocks.length][landedBlocks[0].length];
-        for (int j = 0; j < newLandedBlocks.length ; j++) {
+        for (int j = 0; j < newLandedBlocks.length; j++) {
             if (j < i) {
                 newLandedBlocks[j + 1] = landedBlocks[j];
             }
             if (j > i) {
-                newLandedBlocks[j] =landedBlocks[j];
+                newLandedBlocks[j] = landedBlocks[j];
             }
         }
         landedBlocks = newLandedBlocks;
@@ -109,11 +113,12 @@ public class BlockWorldModel {
     private boolean isWithingBoundsY(int n) {
         return n > -1 && n < landedBlocks.length;
     }
+
     public void landBlock() {
         int[][] blockShape = currentBlock.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
-                if (blockShape[y][x]!=0) {
+                if (blockShape[y][x] != 0) {
                     if (landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] != 1) {
                         landedBlocks[currentBlock.getY() + y][currentBlock.getX() + x] = blockShape[y][x];
                     }
@@ -130,6 +135,24 @@ public class BlockWorldModel {
         }
         currentBlock.moveDown();
         return true;
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
+    }
+
+    public void register(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public void unregister(Listener listener) {
+        listeners.remove(listener);
+    }
+
+    interface Listener {
+        public void update();
     }
 
 
