@@ -8,11 +8,13 @@ public class BlockWorldModel {
     private int[][] landedBlocks;
     int width;
     int height;
+    int score;
 
 
     public BlockWorldModel(int width, int height) {
         this.height = height;
         this.width =width;
+        score=0;
         initializeLandedBlocks(width, height);
 
     }
@@ -29,6 +31,7 @@ public class BlockWorldModel {
 
     public void cleanUpModel() {
         currentBlock = null;
+        score=0;
         initializeLandedBlocks(width,height);
     }
 
@@ -63,6 +66,7 @@ public class BlockWorldModel {
             }
             if (c == max) {
                 removeRow(i);
+                score +=5;
             }
             i++;
         }

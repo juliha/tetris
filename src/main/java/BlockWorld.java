@@ -1,11 +1,8 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Rectangle2D;
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.List;
 
 
 
@@ -35,6 +32,8 @@ public class BlockWorld extends JPanel implements Runnable {
         final Graphics2D g2d = (Graphics2D) this.getGraphics();
         model = new BlockWorldModel(width, height);
 
+        setBorder(
+                BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
         this.addKeyListener(new KeyListener() {
             @Override
@@ -202,8 +201,6 @@ public class BlockWorld extends JPanel implements Runnable {
         JFrame frame = new JFrame("Bloxx");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
-        //run();
-
         frame.pack();
         frame.setVisible(true);
     }
