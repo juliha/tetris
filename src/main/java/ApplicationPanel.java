@@ -51,6 +51,7 @@ public class ApplicationPanel extends JPanel {
         JFrame frame = new JFrame("Bloxx");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
+        blockWorld.startGame();
         frame.pack();
         frame.setVisible(true);
     }

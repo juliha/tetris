@@ -18,7 +18,7 @@ public class Quad extends AbstractBlock {
 
     @Override
     public AbstractBlock copyBlock() {
-        return new Quad(this.getX(), this.getY(), this.getBlockShape());
+        return new Quad(this.getX(), this.getY(), this.blockShape);
     }
     @Override
     public void rotate() {

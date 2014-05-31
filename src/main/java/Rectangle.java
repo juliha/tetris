@@ -19,7 +19,7 @@ public class Rectangle extends AbstractBlock {
 
     @Override
     public AbstractBlock copyBlock() {
-        return new Rectangle(this.getX(), this.getY(),  this.getBlockShape());
+        return new Rectangle(this.getX(), this.getY(),  this.blockShape);
     }
 
 

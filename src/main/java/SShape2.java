@@ -20,6 +20,6 @@ public class SShape2 extends AbstractBlock {
 
     @Override
     public AbstractBlock copyBlock() {
-        return new SShape2(this.getX(), this.getY(), this.getBlockShape());
+        return new SShape2(this.getX(), this.getY(), this.blockShape);
     }
 }
