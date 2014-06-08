@@ -2,14 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 
 
 /**
  * Created by julia on 21.04.14.
  */
-public class BlockWorld extends JPanel implements Runnable  {
+public class BlockWorld extends JPanel implements Runnable {
 
     private int factor;
     private int width;
@@ -18,8 +16,8 @@ public class BlockWorld extends JPanel implements Runnable  {
     private int speed;
 
     private Thread animation;
-    private volatile boolean isRunning=false;
-    private volatile boolean gameOver =false;
+    private volatile boolean isRunning = false;
+    private volatile boolean gameOver = false;
     private BlockWorldModel model;
 
     BlockWorld(int width, int height, int factor) {
@@ -43,7 +41,7 @@ public class BlockWorld extends JPanel implements Runnable  {
             @Override
             public void keyPressed(KeyEvent keyEvent) {
                 int code = keyEvent.getKeyCode();
-                AbstractBlock block = model.getCurrentBlock().copyBlock();
+                final AbstractBlock block = model.getCurrentBlock().copyBlock();
                 switch (code) {
                     case KeyEvent.VK_RIGHT:
                         block.moveRight();
@@ -58,9 +56,17 @@ public class BlockWorld extends JPanel implements Runnable  {
                         }
                         break;
                     case KeyEvent.VK_UP:
+//                        block.rotate();
+//                        if (model.moveIsPossible(block)) {
+//                            model.getCurrentBlock().rotate();
+//                            model.getCurrentBlock().setX(block.getX());
+//                        }
                         block.rotate();
                         if (model.moveIsPossible(block)) {
                             model.getCurrentBlock().rotate();
+                        } else {
+                            AbstractBlock wallkickedBlock = model.wallkick(block);
+                            model.setCurrentBlock(wallkickedBlock.copyBlock());
                         }
                         break;
                     case KeyEvent.VK_DOWN:
@@ -70,7 +76,7 @@ public class BlockWorld extends JPanel implements Runnable  {
                         }
                         break;
                 }
-               repaint();
+                repaint();
             }
 
             @Override
@@ -87,7 +93,7 @@ public class BlockWorld extends JPanel implements Runnable  {
 
     @Override
     public void run() {
-        isRunning =true;
+        isRunning = true;
         while (isRunning) {
             gameUpdate();
             repaint();
@@ -106,9 +112,10 @@ public class BlockWorld extends JPanel implements Runnable  {
             }
         }
     }
+
     public void addNotify() {
         super.addNotify();
-       startGame();
+        startGame();
     }
 
 
@@ -120,10 +127,9 @@ public class BlockWorld extends JPanel implements Runnable  {
     }
 
     public void stopGame() {
-        isRunning =false;
+        isRunning = false;
         repaint();
     }
-
 
 
     private void cleanup() {
@@ -131,12 +137,10 @@ public class BlockWorld extends JPanel implements Runnable  {
     }
 
 
-
-
     private void gameUpdate() {
         if (!gameOver) {
             if (model.getCurrentBlock() == null) {
-                isRunning = model.setNewCurrentBlock();
+                isRunning = model.generateAndSetNewCurrentBlock();
             }
             boolean isFalling = model.update();
 
@@ -144,7 +148,7 @@ public class BlockWorld extends JPanel implements Runnable  {
 
                 model.landBlock();
                 model.removeFull();
-                isRunning = model.setNewCurrentBlock();
+                isRunning = model.generateAndSetNewCurrentBlock();
             }
             if (isRunning == false) {
                 stopGame();
@@ -154,16 +158,17 @@ public class BlockWorld extends JPanel implements Runnable  {
 
     public void runGame() {
         Thread gameThread = new Thread() {
-            boolean isRunning = model.setNewCurrentBlock();
+            boolean isRunning = model.generateAndSetNewCurrentBlock();
+
             public void run() {
                 while (isRunning) {
                     boolean isFalling = model.update();
-                      repaint();
+                    repaint();
 
                     if (isFalling == false) {
                         model.landBlock();
                         model.removeFull();
-                        isRunning = model.setNewCurrentBlock();
+                        isRunning = model.generateAndSetNewCurrentBlock();
                         System.out.println(model.getCurrentBlock().getClass());
                     }
                     try {
@@ -177,8 +182,6 @@ public class BlockWorld extends JPanel implements Runnable  {
 
         gameThread.start();  // Invoke GaemThread.run()
     }
-
-
 
 
     public int gameOver() {
@@ -276,11 +279,7 @@ public class BlockWorld extends JPanel implements Runnable  {
                 }
             }
         }
-     }
-
-
-
-
+    }
 
 
 }

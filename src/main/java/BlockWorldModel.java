@@ -6,7 +6,7 @@ import java.util.List;
  * Created by julia on 29.05.2014.
  */
 public class BlockWorldModel {
-    private AbstractBlock currentBlock;
+    private volatile AbstractBlock currentBlock;
     private int[][] landedBlocks;
     int width;
     int height;
@@ -39,7 +39,7 @@ public class BlockWorldModel {
         initializeLandedBlocks(width, height);
     }
 
-    public boolean setNewCurrentBlock() {
+    public boolean generateAndSetNewCurrentBlock() {
         AbstractBlock block = BlockGenerator.getRandomShape();
         if (moveIsPossible(block)) {
             currentBlock = block;
@@ -48,6 +48,10 @@ public class BlockWorldModel {
         //this signals that the game is over
         return false;
 
+    }
+
+    public void setCurrentBlock(AbstractBlock block) {
+        this.currentBlock = block;
     }
 
     public AbstractBlock getCurrentBlock() {
@@ -106,6 +110,29 @@ public class BlockWorldModel {
         }
         return true;
     }
+
+
+    public AbstractBlock wallkick(AbstractBlock block) {
+        AbstractBlock blockRight = block.copyBlock();
+        blockRight.moveRight();
+        if (moveIsPossible(blockRight)) {
+            System.out.println("Will advise move right");
+            return blockRight;
+        } else {
+            AbstractBlock blockLeft = block.copyBlock();
+            blockLeft.moveLeft();
+            if (moveIsPossible(blockLeft)) {
+                System.out.println("Will advise move left");
+                return blockLeft;
+            } else {
+                System.out.println("Will advise move remain same");
+                return block;
+
+            }
+        }
+
+    }
+
 
     private boolean isWithingBoundsX(int n) {
         return n > -1 && n < landedBlocks[0].length;
