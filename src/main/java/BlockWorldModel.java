@@ -11,6 +11,7 @@ public class BlockWorldModel {
     int width;
     int height;
     int score;
+    private int correctedX;
     List<Listener> listeners;
 
 
@@ -19,6 +20,7 @@ public class BlockWorldModel {
         this.width = width;
         score = 0;
         initializeLandedBlocks(width, height);
+        correctedX =-10;
         listeners = new ArrayList<Listener>();
 
     }
@@ -31,6 +33,14 @@ public class BlockWorldModel {
             }
 
         }
+    }
+
+    public int getCorrectedX() {
+        return correctedX;
+    }
+
+    public void resetCorrectedX() {
+        this.correctedX = -10;
     }
 
     public void cleanUpModel() {
@@ -113,16 +123,21 @@ public class BlockWorldModel {
 
 
     public AbstractBlock wallkick(AbstractBlock block) {
+        int initialX = block.getX();
         AbstractBlock blockRight = block.copyBlock();
         blockRight.moveRight();
         if (moveIsPossible(blockRight)) {
             System.out.println("Will advise move right");
+            correctedX = initialX;
+            System.out.println("CorrectedX set to "+ correctedX);
             return blockRight;
         } else {
             AbstractBlock blockLeft = block.copyBlock();
             blockLeft.moveLeft();
             if (moveIsPossible(blockLeft)) {
                 System.out.println("Will advise move left");
+                correctedX = initialX;
+                System.out.println("CorrectedX set to "+ correctedX);
                 return blockLeft;
             } else {
                 System.out.println("Will advise move remain same");

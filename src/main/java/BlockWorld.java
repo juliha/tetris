@@ -46,24 +46,31 @@ public class BlockWorld extends JPanel implements Runnable {
                     case KeyEvent.VK_RIGHT:
                         block.moveRight();
                         if (model.moveIsPossible(block)) {
+                            model.resetCorrectedX();
                             model.getCurrentBlock().moveRight();
                         }
                         break;
                     case KeyEvent.VK_LEFT:
                         block.moveLeft();
                         if (model.moveIsPossible(block)) {
+                            model.resetCorrectedX();
                             model.getCurrentBlock().moveLeft();
                         }
                         break;
                     case KeyEvent.VK_UP:
-//                        block.rotate();
-//                        if (model.moveIsPossible(block)) {
-//                            model.getCurrentBlock().rotate();
-//                            model.getCurrentBlock().setX(block.getX());
-//                        }
+                        int correctedX = model.getCorrectedX();
+                        System.out.println("correctedX " + correctedX);
                         block.rotate();
+                       if (correctedX != -10) {
+                           block.setX(correctedX);
+                        }
+                        System.out.println("block's X " + block.getX());
                         if (model.moveIsPossible(block)) {
                             model.getCurrentBlock().rotate();
+                            if (correctedX != -10) {
+                                model.getCurrentBlock().setX(correctedX);
+                            }
+                            System.out.println("current Block's X " + model.getCurrentBlock().getX());
                         } else {
                             AbstractBlock wallkickedBlock = model.wallkick(block);
                             model.setCurrentBlock(wallkickedBlock.copyBlock());
@@ -154,33 +161,6 @@ public class BlockWorld extends JPanel implements Runnable {
                 stopGame();
             }
         }
-    }
-
-    public void runGame() {
-        Thread gameThread = new Thread() {
-            boolean isRunning = model.generateAndSetNewCurrentBlock();
-
-            public void run() {
-                while (isRunning) {
-                    boolean isFalling = model.update();
-                    repaint();
-
-                    if (isFalling == false) {
-                        model.landBlock();
-                        model.removeFull();
-                        isRunning = model.generateAndSetNewCurrentBlock();
-                        System.out.println(model.getCurrentBlock().getClass());
-                    }
-                    try {
-                        Thread.sleep(speed * 1000);
-                    } catch (InterruptedException ex) {
-                    }
-                }
-                gameOver();
-            }
-        };
-
-        gameThread.start();  // Invoke GaemThread.run()
     }
 
 
