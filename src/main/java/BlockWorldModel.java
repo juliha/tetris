@@ -14,6 +14,7 @@ public class BlockWorldModel {
     int height;
     int score;
     private int correctedX;
+    private int numRotate;
     List<Listener> listeners;
 
 
@@ -24,6 +25,7 @@ public class BlockWorldModel {
         initializeLandedBlocks(width, height);
         correctedX =-10;
         listeners = new ArrayList<Listener>();
+        numRotate=0;
 
     }
 
@@ -40,6 +42,18 @@ public class BlockWorldModel {
 
     public int getCorrectedX() {
         return correctedX;
+    }
+
+    public int getNumRotate() {
+        return numRotate;
+    }
+
+    public void setNumRotate(int numRotate) {
+        this.numRotate = numRotate;
+    }
+
+    public void incrementNumRotate() {
+        numRotate++;
     }
 
     public void resetCorrectedX() {
@@ -109,7 +123,6 @@ public class BlockWorldModel {
     }
 
     public boolean moveIsPossible(AbstractBlock block) {
-        System.out.println("move is possible @ Thread "+ Thread.currentThread());
         int[][] blockShape = block.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
@@ -138,6 +151,9 @@ public class BlockWorldModel {
             return blockRight;
         } else {
             AbstractBlock blockLeft = block.copyBlock();
+            if (blockLeft instanceof IShape) {
+                blockLeft.moveLeft();
+            }
             blockLeft.moveLeft();
             if (moveIsPossible(blockLeft)) {
                 correctedX = initialX;
@@ -182,7 +198,6 @@ public class BlockWorldModel {
     public boolean update() {
         AbstractBlock block = getCurrentBlock().copyBlock();
         block.moveDown();
-        System.out.println("move down is happening");
         if (!moveIsPossible(block)) {
             return false;
         }

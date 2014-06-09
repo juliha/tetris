@@ -59,7 +59,9 @@ abstract class AbstractBlock {
     }
 
     public void moveDown() {
-        this.y++;
+
+         y++;
+
     }
 
     public void rotate() {

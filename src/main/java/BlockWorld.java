@@ -48,19 +48,16 @@ public class BlockWorld extends JPanel implements Runnable {
                     case KeyEvent.VK_RIGHT:
                         block.moveRight();
                         if (model.moveIsPossible(block)) {
-                            model.resetCorrectedX();
                             model.getCurrentBlock().moveRight();
                         }
                         break;
                     case KeyEvent.VK_LEFT:
                         block.moveLeft();
                         if (model.moveIsPossible(block)) {
-                            model.resetCorrectedX();
                             model.getCurrentBlock().moveLeft();
                         }
                         break;
                     case KeyEvent.VK_UP:
-                        System.out.print("-- Rotation ");
                         int correctedX = model.getCorrectedX();
                         block.rotate();
                        if (correctedX != -10) {
@@ -75,7 +72,6 @@ public class BlockWorld extends JPanel implements Runnable {
                             AbstractBlock wallkickedBlock = model.wallkick(block);
                             model.setCurrentBlock(wallkickedBlock.copyBlock());
                         }
-                        System.out.print("--  ");
                         break;
                     case KeyEvent.VK_DOWN:
                         block.moveDown();
