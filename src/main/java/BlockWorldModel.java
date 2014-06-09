@@ -125,6 +125,9 @@ public class BlockWorldModel {
     public AbstractBlock wallkick(AbstractBlock block) {
         int initialX = block.getX();
         AbstractBlock blockRight = block.copyBlock();
+        if (blockRight instanceof IShape) {
+            blockRight.moveRight();
+        }
         blockRight.moveRight();
         if (moveIsPossible(blockRight)) {
             System.out.println("Will advise move right");
