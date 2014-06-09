@@ -1,12 +1,14 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by julia on 29.05.2014.
  */
 public class BlockWorldModel {
-    private volatile AbstractBlock currentBlock;
+    private AbstractBlock currentBlock;
     private int[][] landedBlocks;
     int width;
     int height;
@@ -26,6 +28,7 @@ public class BlockWorldModel {
     }
 
     public void initializeLandedBlocks(int width, int height) {
+
         landedBlocks = new int[height][width];
         for (int i = 0; i < landedBlocks.length; i++) {
             for (int j = 0; j < landedBlocks[i].length; j++) {
@@ -50,6 +53,7 @@ public class BlockWorldModel {
     }
 
     public boolean generateAndSetNewCurrentBlock() {
+        resetCorrectedX();
         AbstractBlock block = BlockGenerator.getRandomShape();
         if (moveIsPossible(block)) {
             currentBlock = block;
@@ -105,7 +109,7 @@ public class BlockWorldModel {
     }
 
     public boolean moveIsPossible(AbstractBlock block) {
-
+        System.out.println("move is possible @ Thread "+ Thread.currentThread());
         int[][] blockShape = block.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
             for (int x = 0; x < blockShape[y].length; x++) {
@@ -130,20 +134,15 @@ public class BlockWorldModel {
         }
         blockRight.moveRight();
         if (moveIsPossible(blockRight)) {
-            System.out.println("Will advise move right");
             correctedX = initialX;
-            System.out.println("CorrectedX set to "+ correctedX);
             return blockRight;
         } else {
             AbstractBlock blockLeft = block.copyBlock();
             blockLeft.moveLeft();
             if (moveIsPossible(blockLeft)) {
-                System.out.println("Will advise move left");
                 correctedX = initialX;
-                System.out.println("CorrectedX set to "+ correctedX);
                 return blockLeft;
             } else {
-                System.out.println("Will advise move remain same");
                 return block;
 
             }
@@ -183,6 +182,7 @@ public class BlockWorldModel {
     public boolean update() {
         AbstractBlock block = getCurrentBlock().copyBlock();
         block.moveDown();
+        System.out.println("move down is happening");
         if (!moveIsPossible(block)) {
             return false;
         }

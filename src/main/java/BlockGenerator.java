@@ -7,7 +7,6 @@ public class BlockGenerator {
         double high = 7;
         int i = (int) (Math.random() * (high));
         i= 2;
-        System.out.println("case " + i);
         switch (i) {
             case 0:
                 return new LShape(4, 0);

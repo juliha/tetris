@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
 
 
 /**
@@ -40,6 +41,7 @@ public class BlockWorld extends JPanel implements Runnable {
 
             @Override
             public void keyPressed(KeyEvent keyEvent) {
+
                 int code = keyEvent.getKeyCode();
                 final AbstractBlock block = model.getCurrentBlock().copyBlock();
                 switch (code) {
@@ -58,23 +60,22 @@ public class BlockWorld extends JPanel implements Runnable {
                         }
                         break;
                     case KeyEvent.VK_UP:
+                        System.out.print("-- Rotation ");
                         int correctedX = model.getCorrectedX();
-                        System.out.println("correctedX " + correctedX);
                         block.rotate();
                        if (correctedX != -10) {
                            block.setX(correctedX);
                         }
-                        System.out.println("block's X " + block.getX());
                         if (model.moveIsPossible(block)) {
                             model.getCurrentBlock().rotate();
                             if (correctedX != -10) {
                                 model.getCurrentBlock().setX(correctedX);
                             }
-                            System.out.println("current Block's X " + model.getCurrentBlock().getX());
                         } else {
                             AbstractBlock wallkickedBlock = model.wallkick(block);
                             model.setCurrentBlock(wallkickedBlock.copyBlock());
                         }
+                        System.out.print("--  ");
                         break;
                     case KeyEvent.VK_DOWN:
                         block.moveDown();
@@ -102,7 +103,19 @@ public class BlockWorld extends JPanel implements Runnable {
     public void run() {
         isRunning = true;
         while (isRunning) {
-            gameUpdate();
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        gameUpdate();
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
             repaint();
             try {
                 Thread.sleep(speed * 1000);
@@ -179,56 +192,11 @@ public class BlockWorld extends JPanel implements Runnable {
 
     }
 
-//    private void renderGame() {
-//        if (imgBuffer == null) {
-//            imgBuffer = createImage(width * factor, height * factor);
-//            if (imgBuffer == null) {
-//                System.out.println("img Buffer is null");
-//                return;
-//            }
-//            g= imgBuffer.getGraphics();
-//        }
-//        g.setColor(Color.WHITE);
-//        AbstractBlock block = model.getCurrentBlock();
-//        System.out.println(Arrays.deepToString(block.getBlockShape()));
-//        if (block != null) {
-//            int[][] blockShape = block.getBlockShape();
-//            for (int y = 0; y < blockShape.length; y++) {
-//                for (int x = 0; x < blockShape[y].length; x++) {
-//                    if (blockShape[y][x] == 1) {
-//                        g.setColor(block.getColor());
-//                        g.fillRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
-//                        g.setColor(Color.LIGHT_GRAY);
-//                        g.drawRect((block.getX() + x) * factor, (block.getY() + y) * factor, factor, factor);
-//                    }
-//                }
-//            }
-//        }
-//
-//        int[][] landedBlocks = model.getLandedBlocks();
-//        for (int y = 0; y < landedBlocks.length; y++) {
-//            for (int x = 0; x < landedBlocks[y].length; x++) {
-//                g.setColor(Color.lightGray);
-//                g.drawRect(x * factor, y * factor, factor, factor);
-//                if (landedBlocks[y][x] == 1) {
-//                    g.setColor(Color.DARK_GRAY);
-//                    g.fillRect(x * factor, y * factor, factor, factor);
-//                    g.setColor(Color.lightGray);
-//                    g.drawRect(x * factor, y * factor, factor, factor);
-//                }
-//            }
-//        }
-//
-//
-//    }
 
 
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-//        if (imgBuffer != null) {
-//            graphics.drawImage(imgBuffer, 0,0,null);
-//        }
         Graphics2D g2d = (Graphics2D) graphics;
 
         AbstractBlock block = model.getCurrentBlock();
