@@ -138,6 +138,15 @@ public class BlockWorldModel {
         return true;
     }
 
+    private boolean isWithingBoundsX(int n) {
+        return n > -1 && n < landedBlocks[0].length;
+    }
+
+    public boolean isWithingBoundsY(int n) {
+        return n > -1 && n < landedBlocks.length;
+    }
+
+
 
     public AbstractBlock wallkick(AbstractBlock block) {
         int initialX = block.getX();
@@ -167,13 +176,6 @@ public class BlockWorldModel {
     }
 
 
-    private boolean isWithingBoundsX(int n) {
-        return n > -1 && n < landedBlocks[0].length;
-    }
-
-    private boolean isWithingBoundsY(int n) {
-        return n > -1 && n < landedBlocks.length;
-    }
 
     public void landBlock() {
         int[][] blockShape = currentBlock.getBlockShape();

@@ -69,8 +69,12 @@ public class BlockWorld extends JPanel implements Runnable {
                                 model.getCurrentBlock().setX(correctedX);
                             }
                         } else {
-                            AbstractBlock wallkickedBlock = model.wallkick(block);
-                            model.setCurrentBlock(wallkickedBlock.copyBlock());
+                            if (model.isWithingBoundsY(block.getY() + block.getBlockShape().length)) {
+                                AbstractBlock wallkickedBlock = model.wallkick(block);
+                                model.setCurrentBlock(wallkickedBlock.copyBlock());
+
+                            }
+
                         }
                         break;
                     case KeyEvent.VK_DOWN:
