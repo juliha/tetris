@@ -1,8 +1,6 @@
 
 
 import net.miginfocom.swing.MigLayout;
-import sun.misc.JavaLangAccess;
-
 import javax.swing.*;
 import java.awt.*;
 
