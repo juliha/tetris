@@ -90,7 +90,9 @@ public class BlockWorldModel {
         return landedBlocks;
     }
 
+
     public void removeFull() {
+        int rowsRemoved=0;
         int i = 0;
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
@@ -102,10 +104,13 @@ public class BlockWorldModel {
             }
             if (c == max) {
                 removeRow(i);
-                score += 5;
-                notifyListeners();
+                rowsRemoved++;
             }
             i++;
+        }
+        if (rowsRemoved != 0) {
+            score += Math.pow(5,rowsRemoved);
+            notifyListeners();
         }
     }
 
