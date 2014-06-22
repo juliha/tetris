@@ -11,7 +11,6 @@ public class BlockWorldModel {
     int height;
     int score;
     private int correctedX;
-    private int numRotate;
     List<Listener> listeners;
 
 
@@ -20,10 +19,8 @@ public class BlockWorldModel {
         this.width = width;
         score = 0;
         initializeLandedBlocks(width, height);
-        correctedX =-10;
+        correctedX = -10;
         listeners = new ArrayList<Listener>();
-        numRotate=0;
-
     }
 
     public void initializeLandedBlocks(int width, int height) {
@@ -33,7 +30,6 @@ public class BlockWorldModel {
             for (int j = 0; j < landedBlocks[i].length; j++) {
                 landedBlocks[i][j] = 0;
             }
-
         }
     }
 
@@ -43,18 +39,6 @@ public class BlockWorldModel {
 
     public int getCorrectedX() {
         return correctedX;
-    }
-
-    public int getNumRotate() {
-        return numRotate;
-    }
-
-    public void setNumRotate(int numRotate) {
-        this.numRotate = numRotate;
-    }
-
-    public void incrementNumRotate() {
-        numRotate++;
     }
 
     public void resetCorrectedX() {
@@ -94,7 +78,6 @@ public class BlockWorldModel {
         score += number;
         notifyListeners();
     }
-
 
     public void removeFull() {
         int rowsRemoved=0;
@@ -156,7 +139,6 @@ public class BlockWorldModel {
     }
 
 
-
     public AbstractBlock wallkick(AbstractBlock block) {
         int initialX = block.getX();
         AbstractBlock blockRight = block.copyBlock();
@@ -184,8 +166,6 @@ public class BlockWorldModel {
 
     }
 
-
-
     public void landBlock() {
         int[][] blockShape = currentBlock.getBlockShape();
         for (int y = 0; y < blockShape.length; y++) {
@@ -198,8 +178,6 @@ public class BlockWorldModel {
             }
         }
     }
-
-
 
     private void notifyListeners() {
         for (Listener listener : listeners) {

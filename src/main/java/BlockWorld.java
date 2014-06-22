@@ -27,6 +27,7 @@ public class BlockWorld extends JPanel implements Runnable {
         this.setFocusable(true);
         model = new BlockWorldModel(width, height);
 
+
         setBorder(
                 BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 
@@ -82,7 +83,6 @@ public class BlockWorld extends JPanel implements Runnable {
                     case KeyEvent.VK_SPACE :
                         int score = model.getHeight() - block.getY();
                         model.increaseScore(score);
-
                         while (true) {
                             block.moveDown();
                             if (!model.moveIsPossible(block)) {

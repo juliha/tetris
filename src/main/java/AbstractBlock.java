@@ -46,7 +46,6 @@ abstract class AbstractBlock {
 
     }
 
-
     public void moveRight() {
         x++;
     }
@@ -56,9 +55,7 @@ abstract class AbstractBlock {
     }
 
     public void moveDown() {
-
          y++;
-
     }
 
     public void rotate() {
