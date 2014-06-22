@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.util.List;
 
 
 /**
@@ -18,6 +20,8 @@ public class BlockWorld extends JPanel implements Runnable {
     private volatile boolean isRunning = false;
     private volatile boolean gameOver = false;
     private BlockWorldModel model;
+    private List<Integer> removeRows;
+    private boolean isFalling = true;
 
     BlockWorld(int width, int height, int factor) {
         super();
@@ -110,12 +114,28 @@ public class BlockWorld extends JPanel implements Runnable {
     @Override
     public void run() {
         isRunning = true;
+
+
         while (isRunning) {
             try {
                 SwingUtilities.invokeAndWait(new Runnable() {
                     @Override
                     public void run() {
-                        gameUpdate();
+                        //gameUpdate();
+                        if (!gameOver) {
+                            if (model.getCurrentBlock() == null) {
+                                isRunning = model.generateAndSetNewCurrentBlock();
+                            }
+                            isFalling = model.update();
+
+                            if (isFalling == false) {
+                                model.landBlock();
+                                removeRows =model.removeFull();
+
+                            }
+
+                        }
+
                     }
                 });
             } catch (InterruptedException e) {
@@ -123,7 +143,38 @@ public class BlockWorld extends JPanel implements Runnable {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
+            if (removeRows != null && removeRows.size() != 0) {
+                repaint();
+                try {
+                    Thread.sleep(speed * 500);
+                } catch (InterruptedException ex) {
+                }
+            }
 
+
+            try {
+                SwingUtilities.invokeAndWait(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isFalling == false) {
+                            for (int i = 0; i < removeRows.size(); i++) {
+                                model.removeRow(removeRows.get(i));
+                            }
+                        isRunning = model.generateAndSetNewCurrentBlock();
+                        }
+                        if (isRunning == false) {
+                            stopGame();
+                        }
+                    }
+                });
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            if (removeRows != null) {
+                removeRows.clear();
+            }
             repaint();
             try {
                 Thread.sleep(speed * 1000);
@@ -175,7 +226,7 @@ public class BlockWorld extends JPanel implements Runnable {
             if (isFalling == false) {
 
                 model.landBlock();
-                model.removeFull();
+                removeRows =model.removeFull();
                 isRunning = model.generateAndSetNewCurrentBlock();
             }
             if (isRunning == false) {
@@ -224,14 +275,21 @@ public class BlockWorld extends JPanel implements Runnable {
 
         int[][] landedBlocks = model.getLandedBlocks();
         for (int y = 0; y < landedBlocks.length; y++) {
+
+
             for (int x = 0; x < landedBlocks[y].length; x++) {
                 g2d.setColor(Color.lightGray);
                 g2d.drawRect(x * factor, y * factor, factor, factor);
                 if (landedBlocks[y][x] == 1) {
                     g2d.setColor(Color.DARK_GRAY);
+                    if (removeRows.contains(y)) {
+                        g2d.setColor(Color.WHITE);
+                    }
                     g2d.fillRect(x * factor, y * factor, factor, factor);
                     g2d.setColor(Color.lightGray);
                     g2d.drawRect(x * factor, y * factor, factor, factor);
+
+
                 }
             }
         }

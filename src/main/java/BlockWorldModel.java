@@ -79,8 +79,8 @@ public class BlockWorldModel {
         notifyListeners();
     }
 
-    public void removeFull() {
-        int rowsRemoved=0;
+    public List<Integer> removeFull() {
+        List<Integer> rowsToBeRemoved = new ArrayList<Integer>();
         int i = 0;
         while (i < landedBlocks.length) {
             int max = landedBlocks[i].length;
@@ -91,17 +91,19 @@ public class BlockWorldModel {
                 }
             }
             if (c == max) {
-                removeRow(i);
-                rowsRemoved++;
+                //removeRow(i);
+                rowsToBeRemoved.add(i);
             }
             i++;
         }
-        if (rowsRemoved != 0) {
-            increaseScore((int) Math.pow(10, rowsRemoved));
+
+        if (rowsToBeRemoved.size() != 0) {
+            increaseScore((int) Math.pow(10, rowsToBeRemoved.size()));
         }
+       return rowsToBeRemoved;
     }
 
-    private void removeRow(int i) {
+    public void removeRow(int i) {
         int[][] newLandedBlocks = new int[landedBlocks.length][landedBlocks[0].length];
         for (int j = 0; j < newLandedBlocks.length; j++) {
             if (j < i) {
