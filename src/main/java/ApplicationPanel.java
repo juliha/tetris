@@ -34,7 +34,7 @@ public class ApplicationPanel extends JPanel {
             }
         };
         blockWorld.getModel().register(scoreChangeListener);
-        setLayout(new MigLayout("wrap 1", "[][]"));
+        setLayout(new MigLayout(" fill, insets 0, wrap 1", "5[][]"));
         heading.setForeground(Color.WHITE);
         heading.setFont(new Font(getName(), Font.BOLD, 16));
         heading.setText("BLOXX");
