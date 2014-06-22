@@ -113,7 +113,6 @@ public class BlockWorldModel {
             }
             i++;
         }
-        System.err.println(rowsRemoved);
         if (rowsRemoved != 0) {
             increaseScore((int) Math.pow(10, rowsRemoved));
         }
