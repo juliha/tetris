@@ -11,8 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 public class BlockWorld extends JPanel implements Runnable {
 
     private int factor;
-    private int width;
-    private int height;
     Color color = Color.LIGHT_GRAY;
     private int speed;
 
@@ -25,8 +23,6 @@ public class BlockWorld extends JPanel implements Runnable {
         super();
         setBackground(Color.WHITE);
         this.factor = factor;
-        this.width = width;
-        this.height = height;
         this.setPreferredSize(new Dimension(width * factor, height * factor));
         this.setFocusable(true);
         model = new BlockWorldModel(width, height);
@@ -83,6 +79,18 @@ public class BlockWorld extends JPanel implements Runnable {
                             model.getCurrentBlock().moveDown();
                         }
                         break;
+                    case KeyEvent.VK_SPACE :
+                        int score = model.getHeight() - block.getY();
+                        model.increaseScore(score);
+
+                        while (true) {
+                            block.moveDown();
+                            if (!model.moveIsPossible(block)) {
+                                return;
+                            }
+                            model.getCurrentBlock().moveDown();
+                            repaint();
+                        }
                 }
                 repaint();
             }

@@ -40,6 +40,10 @@ public class BlockWorldModel {
         }
     }
 
+    public int getHeight() {
+        return height;
+    }
+
     public int getCorrectedX() {
         return correctedX;
     }
@@ -75,7 +79,6 @@ public class BlockWorldModel {
         }
         //this signals that the game is over
         return false;
-
     }
 
     public void setCurrentBlock(AbstractBlock block) {
@@ -88,6 +91,11 @@ public class BlockWorldModel {
 
     public int[][] getLandedBlocks() {
         return landedBlocks;
+    }
+
+    public void increaseScore(int number) {
+        score += number;
+        notifyListeners();
     }
 
 
@@ -108,9 +116,9 @@ public class BlockWorldModel {
             }
             i++;
         }
+        System.err.println(rowsRemoved);
         if (rowsRemoved != 0) {
-            score += Math.pow(5,rowsRemoved);
-            notifyListeners();
+            increaseScore((int) Math.pow(10, rowsRemoved));
         }
     }
 

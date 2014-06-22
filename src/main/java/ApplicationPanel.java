@@ -34,15 +34,15 @@ public class ApplicationPanel extends JPanel {
             }
         };
         blockWorld.getModel().register(scoreChangeListener);
-        setLayout(new MigLayout(" fill, insets 0, wrap 1", "5[][]"));
+        setLayout(new MigLayout(" fillx, insets 1, wrap 1"));
         heading.setForeground(Color.WHITE);
         heading.setFont(new Font(getName(), Font.BOLD, 16));
         heading.setText("BLOXX");
         scoreLabel.setForeground(Color.WHITE);
         scoreLabel.setText("Score:  " + String.valueOf(tetrisScore));
-        add(heading, "align center, wrap");
-        add(scoreLabel,"align center");
-        add(blockWorld, "align center");
+        add(heading, "align center" );
+        add(scoreLabel, "align center");
+        add(blockWorld);
     }
 
 
